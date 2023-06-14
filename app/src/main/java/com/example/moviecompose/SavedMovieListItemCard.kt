@@ -78,6 +78,6 @@ fun SavedMovieListItemCard(movie: Movie) {
 @Composable
 fun SavedMovieListItemPreview() {
     MovieComposeTheme {
-        SavedMovieList()
+        SavedMovieListScreen()
     }
 }

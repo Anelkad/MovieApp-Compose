@@ -1,5 +1,7 @@
 package com.example.moviecompose
 
+import IMAGE_URL
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -8,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -37,18 +40,19 @@ fun MovieListItemCard(movie: Movie) {
 @Composable
 fun MovieListItemContent(movie: Movie){
     AsyncImage(
-        model = movie.posterPath,
+        model = IMAGE_URL.plus(movie.posterPath),
+        placeholder = painterResource(R.drawable.loading_image),
         contentDescription = null,
         modifier = Modifier
-            .padding(5.dp)
-            .clip(shape = RoundedCornerShape(5.dp))
-            .fillMaxHeight()
-    )
+                .padding(5.dp)
+                .clip(shape = RoundedCornerShape(5.dp))
+                .fillMaxWidth(),
+        )
     Text(
         text = movie.title,
         fontSize = 20.sp,
         fontWeight = FontWeight.Bold,
-        modifier = Modifier.padding(start = 5.dp)
+        modifier = Modifier.padding(horizontal = 5.dp)
     )
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -85,10 +89,18 @@ fun MovieListItemContent(movie: Movie){
     }
 }
 
+@Composable
+fun debugPlaceholder(@DrawableRes debugPreview: Int) =
+    if (LocalInspectionMode.current) {
+        painterResource(id = debugPreview)
+    } else {
+        null
+    }
+
 @Preview(showBackground = true)
 @Composable
 fun MovieListItemPreview() {
     MovieComposeTheme {
-        MovieList()
+        MovieListScreen()
     }
 }

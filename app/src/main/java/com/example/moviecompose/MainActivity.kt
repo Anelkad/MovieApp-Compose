@@ -16,6 +16,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,16 +31,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.moviecompose.models.BottomNavItem
+import com.example.moviecompose.models.Movie
 import com.example.moviecompose.ui.theme.MovieComposeTheme
 import com.example.okhttp.api.RetrofitService
-import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val service = RetrofitService()
-        //todo как вытащить MovieList
+        //todo как вытащить movieList
 //        lifecycleScope.launch {
 //            val movieList = service.getMovieList(13).results
 //            setContent {
@@ -89,8 +90,13 @@ fun Navigation(navController: NavHostController){
         navController = navController,
         startDestination = "home"
     ){
+        val service = RetrofitService()
         composable("home"){
-            MovieListScreen()
+            var movieList = ArrayList<Movie>()
+            LaunchedEffect(Unit) {
+                movieList = service.getMovieList(13).results
+            }
+            MovieListScreen(movieList)
         }
         composable("saved"){
             SavedMovieListScreen()

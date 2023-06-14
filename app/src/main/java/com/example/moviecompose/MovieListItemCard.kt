@@ -89,14 +89,6 @@ fun MovieListItemContent(movie: Movie){
     }
 }
 
-@Composable
-fun debugPlaceholder(@DrawableRes debugPreview: Int) =
-    if (LocalInspectionMode.current) {
-        painterResource(id = debugPreview)
-    } else {
-        null
-    }
-
 @Preview(showBackground = true)
 @Composable
 fun MovieListItemPreview() {

@@ -22,7 +22,19 @@ import com.example.moviecompose.ui.theme.MovieComposeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MovieDetailsScreen(movie: MovieDetails){
+fun MovieDetailsScreen(
+    movie: MovieDetails = MovieDetails(1,
+        "Kino",
+        "asdfa".repeat(100),
+        "12-12-2012",
+        "https://lumiere-a.akamaihd.net/v1/images/p_thelittlemermaid_2023_final_796_94759fcc.jpeg",
+        "https://lumiere-a.akamaihd.net/v1/images/p_thelittlemermaid_2023_final_796_94759fcc.jpeg",
+        5.0F,
+        "Hello world!",
+        12000000,
+        120
+    )
+){
     Scaffold(
         topBar = {
             SmallTopAppBar(
@@ -120,18 +132,6 @@ fun MovieDetailsScreen(movie: MovieDetails){
 @Composable
 fun MovieDetailsPreview() {
     MovieComposeTheme {
-        MovieDetailsScreen(
-            MovieDetails(1,
-                "Kino",
-                "asdfa".repeat(100),
-                "12-12-2012",
-                "https://lumiere-a.akamaihd.net/v1/images/p_thelittlemermaid_2023_final_796_94759fcc.jpeg",
-                "https://lumiere-a.akamaihd.net/v1/images/p_thelittlemermaid_2023_final_796_94759fcc.jpeg",
-                5.0F,
-                "Hello world!",
-                12000000,
-                120
-            )
-        )
+        MovieDetailsScreen()
     }
 }

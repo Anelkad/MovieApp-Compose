@@ -1,5 +1,6 @@
 package com.example.moviecompose
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
@@ -8,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.moviecompose.models.Movie
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MovieListScreen(
     movies: List<Movie> = List(100){

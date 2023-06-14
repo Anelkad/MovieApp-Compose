@@ -17,7 +17,8 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.MovieCompose">
+            android:theme="@style/Theme.AppCompat">
+            <!-- todo theme странно наложились с compose -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

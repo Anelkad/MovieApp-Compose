@@ -11,8 +11,11 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.moviecompose.R
+import com.example.moviecompose.adapters.MovieAdapter
 import com.example.moviecompose.screens.MovieListScreen
 import com.example.moviecompose.ui.theme.MovieComposeTheme
 import com.example.moviecompose.utils.Resource
@@ -27,11 +30,12 @@ class MovieListFragment : Fragment() {
     private lateinit var waitDialog: Dialog
 
     val movieAdapter: MovieAdapter by lazy {
-        MovieAdapter
+        MovieAdapter()
     }
     val recyclerView: RecyclerView by lazy {
         RecyclerView(requireContext()).apply {
             adapter = movieAdapter
+            layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
         }
     }
 
@@ -40,11 +44,17 @@ class MovieListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
+
         movieListViewModel.movieListState.observe(viewLifecycleOwner, Observer {
+            if (it is Resource.Success){
+                movieAdapter.submitList(it.getSuccessResult().results.toMutableList())
+            }
+        })
+
             setContent {
-                MovieComposeTheme {
+                //MovieComposeTheme {
                     MovieListScreen(
-                        result = it,
+                        //todo navController передать в констуктор
                         movieOnClick = {
                             val bundle = Bundle().apply {
                                 putInt("id", it)
@@ -59,9 +69,14 @@ class MovieListFragment : Fragment() {
                         },
                         recyclerView = recyclerView
                     )
-                }
             }
-        })
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        //todo observe flow with paginated data and adapter.submitData
+
         savedMovieListViewModel.saveMovieState.observe(viewLifecycleOwner, Observer {
             when (it){
                 is Resource.Failure -> {
@@ -86,11 +101,6 @@ class MovieListFragment : Fragment() {
                 else -> Unit
             }
         })
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        // observe flow with paginated data and adapter.submitData
     }
 
     private fun showWaitDialog(){

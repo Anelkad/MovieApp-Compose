@@ -71,8 +71,7 @@ dependencies {
     kapt 'com.google.dagger:dagger-compiler:2.43.2'
     implementation("com.google.dagger:hilt-android:2.44")
     kapt 'com.google.dagger:hilt-android-compiler:2.44'
-
-
+    
     //Fragments
     implementation "androidx.core:core-ktx:$core"
     implementation "androidx.appcompat:appcompat:$appcompat"
@@ -80,6 +79,9 @@ dependencies {
     //Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+
+    //Glide
+    implementation 'com.github.bumptech.glide:glide:4.15.1'
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1'

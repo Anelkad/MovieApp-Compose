@@ -102,6 +102,6 @@ fun MovieListItemContent(
 @Composable
 fun MovieListItemPreview() {
     MovieComposeTheme {
-        MovieListScreen()
+        //MovieListScreen()
     }
 }

@@ -26,14 +26,14 @@ fun MovieListScreen(
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier) {
+        AndroidView(
+            factory = {
+                recyclerView
+            }
+        )
         when (result) {
             is Resource.Success -> {
                 val movies = result.getSuccessResult().results
-                AndroidView(
-                    factory = {
-                        recyclerView
-                    }
-                )
 //            LazyVerticalStaggeredGrid(
 //                columns = StaggeredGridCells.Fixed(2),
 //                modifier = Modifier.padding(5.dp)

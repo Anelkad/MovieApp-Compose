@@ -1,5 +1,6 @@
-package com.example.moviecompose
+package com.example.moviecompose.screens
 
+import IMAGE_URL
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -14,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.moviecompose.R
 import com.example.moviecompose.models.Movie
 import com.example.moviecompose.ui.theme.MovieComposeTheme
 
@@ -33,7 +35,8 @@ fun SavedMovieListItemCard(movie: Movie) {
                 .fillMaxWidth()
         ) {
             AsyncImage(
-                model = movie.posterPath,
+                model = IMAGE_URL.plus(movie.posterPath),
+                placeholder = painterResource(R.drawable.loading_image),
                 contentDescription = null,
                 modifier = Modifier
                     .padding(10.dp)

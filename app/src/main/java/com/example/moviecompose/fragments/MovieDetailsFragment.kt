@@ -6,14 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
-import com.example.moviecompose.MovieDetailsScreen
+import com.example.moviecompose.screens.MovieDetailsScreen
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MovieDetailsFragment : Fragment() {
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View= ComposeView(requireContext()).apply {
+    ): View = ComposeView(requireContext()).apply {
         setContent {
             MovieDetailsScreen()
         }

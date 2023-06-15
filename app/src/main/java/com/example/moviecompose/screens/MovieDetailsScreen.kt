@@ -1,4 +1,4 @@
-package com.example.moviecompose
+package com.example.moviecompose.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -18,6 +18,7 @@ import com.example.moviecompose.models.MovieDetails
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.moviecompose.R
 import com.example.moviecompose.ui.theme.MovieComposeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)

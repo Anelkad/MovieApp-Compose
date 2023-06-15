@@ -10,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.recyclerview.widget.RecyclerView
 import com.example.moviecompose.models.Movie
 import com.example.moviecompose.models.MovieListResponse
 import com.example.moviecompose.utils.Resource
@@ -19,37 +21,45 @@ import com.example.moviecompose.utils.Resource
 fun MovieListScreen(
     result: Resource<MovieListResponse> = Resource.Loading,
     movieOnClick: (Int) -> Unit = {},
-    movieOnSaveClick: (Movie) -> Unit = {}
-){
-    when (result){
-        is Resource.Success -> {
-            val movies = result.getSuccessResult().results
-            LazyVerticalStaggeredGrid(
-                columns = StaggeredGridCells.Fixed(2),
-                modifier = Modifier.padding(5.dp)
-            ) {
-                items(movies.size) { movieIndex ->
-                    MovieListItemCard(
-                        movie = movies[movieIndex],
-                        movieOnClick = movieOnClick,
-                        movieOnSaveClick = movieOnSaveClick
-                    )
+    movieOnSaveClick: (Movie) -> Unit = {},
+    recyclerView: RecyclerView,
+    modifier: Modifier = Modifier
+) {
+    Box(modifier = modifier) {
+        when (result) {
+            is Resource.Success -> {
+                val movies = result.getSuccessResult().results
+                AndroidView(
+                    factory = {
+                        recyclerView
+                    }
+                )
+//            LazyVerticalStaggeredGrid(
+//                columns = StaggeredGridCells.Fixed(2),
+//                modifier = Modifier.padding(5.dp)
+//            ) {
+//                items(movies.size) { movieIndex ->
+//                    MovieListItemCard(
+//                        movie = movies[movieIndex],
+//                        movieOnClick = movieOnClick,
+//                        movieOnSaveClick = movieOnSaveClick
+//                    )
+//                }
+//            }
+            }
+            is Resource.Loading -> {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    CircularProgressIndicator()
                 }
             }
-        }
-        is Resource.Loading -> {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ){
-                CircularProgressIndicator()
+            is Resource.Failure -> {
+                Text(
+                    text = "Failure to load movies"
+                )
             }
         }
-        is Resource.Failure -> {
-            Text(
-                text = "Failure to load movies"
-            )
-        }
     }
-
 }

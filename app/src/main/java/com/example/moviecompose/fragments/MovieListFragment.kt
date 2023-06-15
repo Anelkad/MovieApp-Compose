@@ -11,6 +11,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.example.moviecompose.R
 import com.example.moviecompose.screens.MovieListScreen
 import com.example.moviecompose.ui.theme.MovieComposeTheme
@@ -23,6 +24,17 @@ import dagger.hilt.android.AndroidEntryPoint
 class MovieListFragment : Fragment() {
     val movieListViewModel: MovieListViewModel by viewModels()
     val savedMovieListViewModel: SavedMovieListViewModel by viewModels()
+    private lateinit var waitDialog: Dialog
+
+    val movieAdapter: MovieAdapter by lazy {
+        MovieAdapter
+    }
+    val recyclerView: RecyclerView by lazy {
+        RecyclerView(requireContext()).apply {
+            adapter = movieAdapter
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -44,7 +56,8 @@ class MovieListFragment : Fragment() {
                         },
                         movieOnSaveClick = {
                             savedMovieListViewModel.saveMovie(it)
-                        }
+                        },
+                        recyclerView = recyclerView
                     )
                 }
             }
@@ -75,7 +88,11 @@ class MovieListFragment : Fragment() {
         })
     }
 
-    private lateinit var waitDialog: Dialog
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        // observe flow with paginated data and adapter.submitData
+    }
+
     private fun showWaitDialog(){
         if (!this::waitDialog.isInitialized) {
             waitDialog = Dialog(requireActivity())

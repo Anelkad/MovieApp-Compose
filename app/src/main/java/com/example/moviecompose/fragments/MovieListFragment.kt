@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.moviecompose.R
 import com.example.moviecompose.screens.MovieListScreen
+import com.example.moviecompose.ui.theme.MovieComposeTheme
 import com.example.moviecompose.utils.Resource
 import com.example.moviecompose.viewmodels.MovieListViewModel
 import com.example.moviecompose.viewmodels.SavedMovieListViewModel
@@ -29,21 +30,23 @@ class MovieListFragment : Fragment() {
     ): View = ComposeView(requireContext()).apply {
         movieListViewModel.movieListState.observe(viewLifecycleOwner, Observer {
             setContent {
-                MovieListScreen(
-                    result = it,
-                    movieOnClick = {
-                        val bundle = Bundle().apply {
-                            putInt("id", it)
+                MovieComposeTheme {
+                    MovieListScreen(
+                        result = it,
+                        movieOnClick = {
+                            val bundle = Bundle().apply {
+                                putInt("id", it)
+                            }
+                            findNavController().navigate(
+                                R.id.action_movieListFragment_to_movieDetailsFragment,
+                                bundle
+                            )
+                        },
+                        movieOnSaveClick = {
+                            savedMovieListViewModel.saveMovie(it)
                         }
-                        findNavController().navigate(
-                            R.id.action_movieListFragment_to_movieDetailsFragment,
-                            bundle
-                        )
-                    },
-                    movieOnSaveClick = {
-                        savedMovieListViewModel.saveMovie(it)
-                    }
-                )
+                    )
+                }
             }
         })
         savedMovieListViewModel.saveMovieState.observe(viewLifecycleOwner, Observer {

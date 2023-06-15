@@ -21,12 +21,16 @@ import com.example.moviecompose.ui.theme.MovieComposeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SavedMovieListItemCard(movie: Movie) {
+fun SavedMovieListItemCard(
+    movie: Movie,
+    movieOnClick: (Int) -> Unit,
+    movieOnDeleteClick: (Int) -> Unit
+) {
     Card(
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),
-        onClick = {},
+        onClick = {movieOnClick(movie.id)},
         modifier = Modifier
             .padding(5.dp)
     ) {
@@ -61,7 +65,7 @@ fun SavedMovieListItemCard(movie: Movie) {
                 )
             }
                 IconButton(
-                    onClick = {},
+                    onClick = {movieOnDeleteClick(movie.id)},
                     modifier = Modifier
                         .size(36.dp)
                 ) {

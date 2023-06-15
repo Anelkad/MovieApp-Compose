@@ -1,6 +1,5 @@
 package com.example.moviecompose.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,15 +16,14 @@ class SavedMovieListViewModel @Inject constructor (
     private val repository: SavedMovieRepository
 ) : ViewModel() {
 
-    //todo заменить LiveData на StateFlow
     private val _savedMovieList = MutableLiveData<Resource<ArrayList<Movie>>>(Resource.Loading)
     val savedMovieList: LiveData<Resource<ArrayList<Movie>>> =_savedMovieList
 
-    private val _saveMovieState = MutableLiveData<Resource<Movie>>(null)
-    val saveMovieState: LiveData<Resource<Movie>> = _saveMovieState
+    private val _saveMovieState = MutableLiveData<Resource<Movie>?>(null)
+    val saveMovieState: LiveData<Resource<Movie>?> = _saveMovieState
 
-    private val _deleteMovieState = MutableLiveData<Resource<Int>>(null)
-    val deleteMovieState: LiveData<Resource<Int>> = _deleteMovieState
+    private val _deleteMovieState = MutableLiveData<Resource<Int>?>(null)
+    val deleteMovieState: LiveData<Resource<Int>?> = _deleteMovieState
 
     init {
         getMovieList()
@@ -37,7 +35,6 @@ class SavedMovieListViewModel @Inject constructor (
        }
     }
 
-
     fun deleteMovie(movieId: Int) = viewModelScope.launch {
         _deleteMovieState.value = Resource.Loading
         val result = repository.deleteMovie(movieId)
@@ -48,5 +45,12 @@ class SavedMovieListViewModel @Inject constructor (
         _saveMovieState.value = Resource.Loading
         val result = repository.saveMovie(movie)
         _saveMovieState.value = result
+    }
+    fun clearSaveMovieState(){
+        _saveMovieState.value = null
+    }
+
+    fun clearDeleteMovieState(){
+        _deleteMovieState.value = null
     }
 }

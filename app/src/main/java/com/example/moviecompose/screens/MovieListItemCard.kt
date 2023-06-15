@@ -24,7 +24,8 @@ import com.example.moviecompose.ui.theme.MovieComposeTheme
 @Composable
 fun MovieListItemCard(
     movie: Movie,
-    movieOnClick: (Int) -> Unit
+    movieOnClick: (Int) -> Unit,
+    movieOnSaveClick: (Movie) -> Unit
 ) {
     Card(
         colors = CardDefaults.cardColors(
@@ -35,12 +36,18 @@ fun MovieListItemCard(
             .padding(5.dp)
             .border(1.dp, Color.Black, shape = RoundedCornerShape(8.dp))
     ) {
-        MovieListItemContent(movie)
+        MovieListItemContent(
+            movie = movie,
+            movieOnSaveClick = movieOnSaveClick
+        )
     }
 }
 
 @Composable
-fun MovieListItemContent(movie: Movie){
+fun MovieListItemContent(
+    movie: Movie,
+    movieOnSaveClick: (Movie) -> Unit
+){
     AsyncImage(
         model = IMAGE_URL.plus(movie.posterPath),
         placeholder = painterResource(R.drawable.loading_image),
@@ -78,7 +85,7 @@ fun MovieListItemContent(movie: Movie){
             Spacer(modifier = Modifier.height(10.dp))
         }
         IconButton(
-            onClick = {},
+            onClick = {movieOnSaveClick(movie)},
             modifier = Modifier
                 .size(36.dp)
         ) {

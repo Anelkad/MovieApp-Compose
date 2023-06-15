@@ -19,7 +19,9 @@ import com.example.moviecompose.utils.Resource
 
 @Composable
 fun SavedMovieListScreen(
-    result: Resource<ArrayList<Movie>> = Resource.Loading
+    result: Resource<ArrayList<Movie>> = Resource.Loading,
+    movieOnClick: (Int) -> Unit = {},
+    movieOnDeleteClick: (Int) -> Unit = {}
 ){
     when (result){
         is Resource.Success -> {
@@ -28,7 +30,11 @@ fun SavedMovieListScreen(
                 modifier = Modifier.padding(5.dp)
             ){
                 items(items = movies){ movie->
-                    SavedMovieListItemCard(movie = movie)
+                    SavedMovieListItemCard(
+                        movie = movie,
+                        movieOnClick = movieOnClick,
+                        movieOnDeleteClick = movieOnDeleteClick
+                    )
                 }
             }
         }

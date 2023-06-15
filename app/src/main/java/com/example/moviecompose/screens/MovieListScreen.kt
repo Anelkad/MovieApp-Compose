@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.moviecompose.models.Movie
 import com.example.moviecompose.models.MovieListResponse
 import com.example.moviecompose.utils.Resource
 
@@ -17,7 +18,8 @@ import com.example.moviecompose.utils.Resource
 @Composable
 fun MovieListScreen(
     result: Resource<MovieListResponse> = Resource.Loading,
-    movieOnClick: (Int) -> Unit = {}
+    movieOnClick: (Int) -> Unit = {},
+    movieOnSaveClick: (Movie) -> Unit = {}
 ){
     when (result){
         is Resource.Success -> {
@@ -29,7 +31,8 @@ fun MovieListScreen(
                 items(movies.size) { movieIndex ->
                     MovieListItemCard(
                         movie = movies[movieIndex],
-                        movieOnClick = movieOnClick
+                        movieOnClick = movieOnClick,
+                        movieOnSaveClick = movieOnSaveClick
                     )
                 }
             }

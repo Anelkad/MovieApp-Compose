@@ -20,13 +20,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.moviecompose.R
+import com.example.moviecompose.models.Movie
 import com.example.moviecompose.ui.theme.MovieComposeTheme
 import com.example.moviecompose.utils.Resource
 
 @Composable
 fun MovieDetailsScreen(
     result: Resource<MovieDetails> = Resource.Loading,
-    onBackPress: () -> Unit = {}
+    onBackPress: () -> Unit = {},
+    movieOnSaveClick: (Movie) -> Unit = {}
 ){
     when (result){
         is Resource.Loading -> {
@@ -45,7 +47,8 @@ fun MovieDetailsScreen(
         is Resource.Success -> {
             MovieDetailsContent(
                 movie = result.getSuccessResult(),
-                onBackPress = onBackPress
+                onBackPress = onBackPress,
+                movieOnSaveClick = movieOnSaveClick
             )
         }
     }
@@ -55,7 +58,8 @@ fun MovieDetailsScreen(
 @Composable
 fun MovieDetailsContent(
     movie: MovieDetails,
-    onBackPress: () -> Unit
+    onBackPress: () -> Unit,
+    movieOnSaveClick: (Movie) -> Unit
 ){
     Scaffold(
         topBar = {
@@ -117,7 +121,7 @@ fun MovieDetailsContent(
             )
             Spacer(modifier = Modifier.height(5.dp))
             Button(
-                onClick = {},
+                onClick = {movieOnSaveClick(movie.toMovie())},
                 modifier = Modifier
                     .align(Alignment.End),
                 shape = RectangleShape

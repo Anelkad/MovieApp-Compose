@@ -17,7 +17,7 @@ class MovieDetailsViewModel @Inject constructor(
     private val repository: MovieRepository
 ): ViewModel() {
 
-    private val _movieDetailsDetailsState = MutableLiveData<Resource<MovieDetails>>(null)
+    private val _movieDetailsDetailsState = MutableLiveData<Resource<MovieDetails>>(Resource.Loading)
     val movieDetailsDetailsState: LiveData<Resource<MovieDetails>> = _movieDetailsDetailsState
 
     fun getMovie(movieId: Int) = viewModelScope.launch(Dispatchers.IO) {

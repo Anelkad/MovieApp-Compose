@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import com.example.moviecompose.R
 import com.example.moviecompose.screens.MovieListScreen
 import com.example.moviecompose.viewmodels.MovieListViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,7 +24,18 @@ class MovieListFragment : Fragment() {
     ): View = ComposeView(requireContext()).apply {
         movieListViewModel.movieListState.observe(viewLifecycleOwner, Observer {
             setContent {
-                MovieListScreen(it)
+                MovieListScreen(
+                    result = it,
+                    movieOnClick = {
+                        val bundle = Bundle().apply {
+                            putInt("id", it)
+                        }
+                        findNavController().navigate(
+                            R.id.action_movieListFragment_to_movieDetailsFragment,
+                            bundle
+                        )
+                    }
+                )
             }
         })
     }

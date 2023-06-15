@@ -22,15 +22,18 @@ import com.example.moviecompose.ui.theme.MovieComposeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MovieListItemCard(movie: Movie) {
+fun MovieListItemCard(
+    movie: Movie,
+    movieOnClick: (Int) -> Unit
+) {
     Card(
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),
-        onClick = {},
+        onClick = {movieOnClick(movie.id)},
         modifier = Modifier
-        .padding(5.dp)
-        .border(1.dp, Color.Black, shape = RoundedCornerShape(8.dp))
+            .padding(5.dp)
+            .border(1.dp, Color.Black, shape = RoundedCornerShape(8.dp))
     ) {
         MovieListItemContent(movie)
     }
@@ -43,9 +46,9 @@ fun MovieListItemContent(movie: Movie){
         placeholder = painterResource(R.drawable.loading_image),
         contentDescription = null,
         modifier = Modifier
-                .padding(5.dp)
-                .clip(shape = RoundedCornerShape(5.dp))
-                .fillMaxWidth(),
+            .padding(5.dp)
+            .clip(shape = RoundedCornerShape(5.dp))
+            .fillMaxWidth(),
         )
     Text(
         text = movie.title,

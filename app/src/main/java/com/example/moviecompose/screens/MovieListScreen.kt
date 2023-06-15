@@ -16,7 +16,8 @@ import com.example.moviecompose.utils.Resource
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MovieListScreen(
-    result: Resource<MovieListResponse> = Resource.Loading
+    result: Resource<MovieListResponse> = Resource.Loading,
+    movieOnClick: (Int) -> Unit = {}
 ){
     when (result){
         is Resource.Success -> {
@@ -26,7 +27,10 @@ fun MovieListScreen(
                 modifier = Modifier.padding(5.dp)
             ) {
                 items(movies.size) { movieIndex ->
-                    MovieListItemCard(movies[movieIndex])
+                    MovieListItemCard(
+                        movie = movies[movieIndex],
+                        movieOnClick = movieOnClick
+                    )
                 }
             }
         }

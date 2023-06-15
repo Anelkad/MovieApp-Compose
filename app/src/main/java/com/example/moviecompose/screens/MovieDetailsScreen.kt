@@ -1,5 +1,6 @@
 package com.example.moviecompose.screens
 
+import IMAGE_URL
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,21 +21,41 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.moviecompose.R
 import com.example.moviecompose.ui.theme.MovieComposeTheme
+import com.example.moviecompose.utils.Resource
+
+@Composable
+fun MovieDetailsScreen(
+    result: Resource<MovieDetails> = Resource.Loading,
+    onBackPress: () -> Unit = {}
+){
+    when (result){
+        is Resource.Loading -> {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ){
+                CircularProgressIndicator()
+            }
+        }
+        is Resource.Failure -> {
+            androidx.compose.material.Text(
+                text = "Failure to load movies"
+            )
+        }
+        is Resource.Success -> {
+            MovieDetailsContent(
+                movie = result.getSuccessResult(),
+                onBackPress = onBackPress
+            )
+        }
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MovieDetailsScreen(
-    movie: MovieDetails = MovieDetails(1,
-        "Kino",
-        "asdfa".repeat(100),
-        "12-12-2012",
-        "https://lumiere-a.akamaihd.net/v1/images/p_thelittlemermaid_2023_final_796_94759fcc.jpeg",
-        "https://lumiere-a.akamaihd.net/v1/images/p_thelittlemermaid_2023_final_796_94759fcc.jpeg",
-        5.0F,
-        "Hello world!",
-        12000000,
-        120
-    )
+fun MovieDetailsContent(
+    movie: MovieDetails,
+    onBackPress: () -> Unit
 ){
     Scaffold(
         topBar = {
@@ -42,13 +63,13 @@ fun MovieDetailsScreen(
                 title = {
                     Text(
                         text = movie.title,
-                        fontSize = 30.sp,
+                        fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     )
                 },
                 navigationIcon = {
                     IconButton(
-                        onClick = {}
+                        onClick = onBackPress
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.baseline_arrow_back_ios_new_24),
@@ -73,7 +94,8 @@ fun MovieDetailsScreen(
                 fontSize = 20.sp
             )
             AsyncImage(
-                model = movie.posterPath,
+                model = IMAGE_URL.plus(movie.posterPath),
+                placeholder = painterResource(R.drawable.loading_image),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth,
                 modifier = Modifier
@@ -117,13 +139,14 @@ fun MovieDetailsScreen(
                 modifier = Modifier.padding(horizontal = 5.dp)
             )
             AsyncImage(
-                    model = movie.backdropPath,
-                    contentDescription = null,
-                    contentScale = ContentScale.FillWidth,
-                    modifier = Modifier
-                        .padding(vertical = 5.dp)
-                        .clip(shape = RoundedCornerShape(10.dp))
-                        .fillMaxWidth()
+                model = IMAGE_URL.plus(movie.backdropPath),
+                placeholder = painterResource(R.drawable.loading_image),
+                contentDescription = null,
+                contentScale = ContentScale.FillWidth,
+                modifier = Modifier
+                    .padding(vertical = 5.dp)
+                    .clip(shape = RoundedCornerShape(10.dp))
+                    .fillMaxWidth()
             )
         }
     }

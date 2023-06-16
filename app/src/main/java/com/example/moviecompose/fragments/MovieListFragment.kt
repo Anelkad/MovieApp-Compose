@@ -30,11 +30,10 @@ class MovieListFragment : Fragment() {
     val savedMovieListViewModel: SavedMovieListViewModel by viewModels()
     private lateinit var waitDialog: Dialog
 
-    var movieAdapter = MovieComposeAdapter()
-//    by lazy {
-//        MovieComposeAdapter()
-//    }
-    val recyclerView: RecyclerView by lazy {
+    private val movieAdapter: MovieComposeAdapter by lazy {
+        MovieComposeAdapter()
+    }
+    private val recyclerView: RecyclerView by lazy {
         RecyclerView(requireContext()).apply {
             adapter = movieAdapter
             layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
@@ -46,8 +45,6 @@ class MovieListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
-        movieAdapter = MovieComposeAdapter()
-
         movieListViewModel.movieListState.observe(viewLifecycleOwner, Observer {
             if (it is Resource.Success){
                 movieAdapter.submitList(it.getSuccessResult().results.toMutableList())

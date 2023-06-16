@@ -10,7 +10,7 @@ import com.example.moviecompose.screens.MovieListItemCard
 
 class MovieComposeAdapter: ListAdapter<Movie, MovieComposeAdapter.HolderMovie>(DiffCallback()){
 
-    class HolderMovie(val composeView: ComposeView): RecyclerView.ViewHolder(composeView) {
+    class HolderMovie(private val composeView: ComposeView): RecyclerView.ViewHolder(composeView) {
         fun bind(movie: Movie) {
             composeView.setContent {
                MovieListItemCard(

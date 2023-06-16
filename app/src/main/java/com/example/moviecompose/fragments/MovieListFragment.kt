@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.moviecompose.R
 import com.example.moviecompose.adapters.MovieAdapter
+import com.example.moviecompose.adapters.MovieComposeAdapter
 import com.example.moviecompose.screens.MovieListScreen
 import com.example.moviecompose.ui.theme.MovieComposeTheme
 import com.example.moviecompose.utils.Resource
@@ -29,9 +30,10 @@ class MovieListFragment : Fragment() {
     val savedMovieListViewModel: SavedMovieListViewModel by viewModels()
     private lateinit var waitDialog: Dialog
 
-    val movieAdapter: MovieAdapter by lazy {
-        MovieAdapter()
-    }
+    var movieAdapter = MovieComposeAdapter()
+//    by lazy {
+//        MovieComposeAdapter()
+//    }
     val recyclerView: RecyclerView by lazy {
         RecyclerView(requireContext()).apply {
             adapter = movieAdapter
@@ -44,6 +46,7 @@ class MovieListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
+        movieAdapter = MovieComposeAdapter()
 
         movieListViewModel.movieListState.observe(viewLifecycleOwner, Observer {
             if (it is Resource.Success){

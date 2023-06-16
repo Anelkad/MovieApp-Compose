@@ -48,12 +48,12 @@ fun MovieListScreen(
 //            }
             }
             is Resource.Loading -> {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    CircularProgressIndicator()
-                }
+//                Column(
+//                    horizontalAlignment = Alignment.CenterHorizontally,
+//                    verticalArrangement = Arrangement.Center
+//                ) {
+//                    CircularProgressIndicator()
+//                }
             }
             is Resource.Failure -> {
                 Text(

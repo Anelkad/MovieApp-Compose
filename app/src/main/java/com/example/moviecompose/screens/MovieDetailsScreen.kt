@@ -64,13 +64,7 @@ fun MovieDetailsContent(
     Scaffold(
         topBar = {
             SmallTopAppBar(
-                title = {
-                    Text(
-                        text = movie.title,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                },
+                title = {},
                 navigationIcon = {
                     IconButton(
                         onClick = onBackPress

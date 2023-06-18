@@ -6,6 +6,8 @@ import com.google.gson.annotations.SerializedName
 data class MovieDetails(
     val id: Int,
     val title: String,
+    @SerializedName("original_title")
+    val originalTitle: String,
     val overview: String,
     @SerializedName("release_date")
     val releaseDate: String,
@@ -15,6 +17,11 @@ data class MovieDetails(
     val backdropPath: String,
     @SerializedName("vote_average")
     val voteAverage: Float,
+    @SerializedName("vote_count")
+    val voteCount: Int,
+    @SerializedName("production_countries")
+    val productionCountries: List<ProductionCountry>,
+    val genres: List<Genre>,
     val tagline: String,
     val revenue: Int,
     val runtime: Int

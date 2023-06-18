@@ -45,13 +45,7 @@ class MovieListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
-        movieListViewModel.movieListState.observe(viewLifecycleOwner, Observer {
-            if (it is Resource.Success){
-                movieAdapter.submitList(it.getSuccessResult().results.toMutableList())
-            }
-        })
-
-            setContent {
+        setContent {
                 //MovieComposeTheme {
                     MovieListScreen(
                         //todo navController передать в констуктор
@@ -76,6 +70,12 @@ class MovieListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //todo observe flow with paginated data and adapter.submitData
+        //todo paging adapter
+        movieListViewModel.movieListState.observe(viewLifecycleOwner, Observer {
+            if (it is Resource.Success){
+                movieAdapter.submitList(it.getSuccessResult().results.toMutableList())
+            }
+        })
 
         savedMovieListViewModel.saveMovieState.observe(viewLifecycleOwner, Observer {
             when (it){

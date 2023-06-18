@@ -8,6 +8,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="light_gray">#F0F0F0</color>
+    <color name="rating">#40CC47</color>
+    <color name="orange">#FF6A1D</color>
+    <color name="yellow">#e1a008</color>
+    <color name="light_yellow">#ffe9b4</color>
+
     <color name="bottom_nav_selected_item">#5959E1</color>
     <color name="bottom_nav_item">#2E2D43</color>
 

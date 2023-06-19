@@ -8,15 +8,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.moviecompose.models.Movie
 import com.example.moviecompose.screens.MovieListItemCard
 
-class MovieComposeAdapter: ListAdapter<Movie, MovieComposeAdapter.HolderMovie>(DiffCallback()){
+class MovieComposeAdapter(
+    private val onMovieClickListener: ((Int) -> Unit),
+    private val saveMovieListener: ((Movie) -> Unit)
+): ListAdapter<Movie, MovieComposeAdapter.HolderMovie>(DiffCallback()){
 
-    class HolderMovie(private val composeView: ComposeView): RecyclerView.ViewHolder(composeView) {
+    inner class HolderMovie(private val composeView: ComposeView): RecyclerView.ViewHolder(composeView) {
         fun bind(movie: Movie) {
             composeView.setContent {
                MovieListItemCard(
                    movie = movie,
-                   movieOnSaveClick = {},
-                   movieOnClick = {}
+                   movieOnSaveClick = {saveMovieListener(movie)},
+                   movieOnClick = {onMovieClickListener(movie.id)}
                )
             }
         }

@@ -1,5 +1,6 @@
 package com.example.moviecompose.screens
 
+import IMAGE_URL
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -70,7 +71,6 @@ fun MovieDetailsKinopoisk(
             movie = movie,
             modifier = Modifier.padding(contentPadding)
         )
-
     }
 }
 
@@ -78,7 +78,7 @@ fun MovieDetailsKinopoisk(
 fun MovieDetailsKinopoiskContent(
     movie: MovieDetails,
     modifier: Modifier
-) {
+) { //todo разделить все на отдельные функции
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -87,7 +87,7 @@ fun MovieDetailsKinopoiskContent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         AsyncImage(
-            model = movie.posterPath,
+            model = IMAGE_URL.plus(movie.posterPath),
             placeholder = painterResource(R.drawable.loading_image),
             contentDescription = null,
             contentScale = ContentScale.FillWidth,
@@ -125,7 +125,7 @@ fun MovieDetailsKinopoiskContent(
         }
         Row {
             Text(
-                text = "${movie.releaseDate.takeLast(4)},",
+                text = "${movie.releaseDate.take(4)},",
                 fontSize = 18.sp,
                 color = Color.Gray
             )

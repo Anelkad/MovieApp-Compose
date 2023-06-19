@@ -10,21 +10,25 @@ import android.widget.Toast
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.moviecompose.R
+import com.example.moviecompose.screens.MovieDetailsKinopoisk
 import com.example.moviecompose.screens.MovieDetailsScreen
 import com.example.moviecompose.utils.Resource
 import com.example.moviecompose.viewmodels.MovieDetailsViewModel
 import com.example.moviecompose.viewmodels.SavedMovieListViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MovieDetailsFragment : Fragment() {
 
     val args: MovieDetailsFragmentArgs by navArgs()
     val movieViewModel: MovieDetailsViewModel by viewModels()
-    val savedMovieListViewModel: SavedMovieListViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,39 +37,43 @@ class MovieDetailsFragment : Fragment() {
         movieViewModel.getMovie(args.id)
         movieViewModel.movieDetailsDetailsState.observe(viewLifecycleOwner, Observer {
             setContent {
-                MovieDetailsScreen(
-                    result = it,
-                    onBackPress = {findNavController().popBackStack()},
-                    movieOnSaveClick = {savedMovieListViewModel.saveMovie(it)}
-                )
+                if (it is Resource.Success) MovieDetailsKinopoisk(it.getSuccessResult())
+//                MovieDetailsScreen(
+//                    result = it,
+//                    onBackPress = {findNavController().popBackStack()},
+//                    movieOnSaveClick = {savedMovieListViewModel.saveMovie(it)}
+//                )
             }
         })
+    }
 
-        savedMovieListViewModel.saveMovieState.observe(viewLifecycleOwner, Observer {
-            when (it){
-                is Resource.Failure -> {
-                    hideWaitDialog()
-                    Toast.makeText(
-                        context, "Cannot save movie!",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    savedMovieListViewModel.clearSaveMovieState()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            movieViewModel.saveMovieState.collectLatest {
+                when (it){
+                    is Resource.Failure -> {
+                        hideWaitDialog()
+                        Toast.makeText(
+                            context, "Cannot save movie!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    is Resource.Loading -> {
+                        showWaitDialog()
+                    }
+                    is Resource.Success ->{
+                        hideWaitDialog()
+                        Toast.makeText(
+                            context, "Movie \"${it.getSuccessResult().title}\" saved!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    else -> Unit
                 }
-                is Resource.Loading -> {
-                    showWaitDialog()
-                }
-                is Resource.Success ->{
-                    hideWaitDialog()
-                    Toast.makeText(
-                        context, "Movie \"${it.getSuccessResult().title}\" saved!",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    savedMovieListViewModel.clearSaveMovieState()
-                }
-                else -> Unit
             }
-        })
-
+        }
     }
 
     private lateinit var waitDialog: Dialog

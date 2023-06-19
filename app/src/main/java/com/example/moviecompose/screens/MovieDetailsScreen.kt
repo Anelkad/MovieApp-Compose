@@ -40,7 +40,7 @@ fun MovieDetailsScreen(
             }
         }
         is Resource.Failure -> {
-            androidx.compose.material.Text(
+            Text(
                 text = "Failure to load movies"
             )
         }

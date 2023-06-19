@@ -10,12 +10,15 @@ import android.widget.Toast
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.moviecompose.R
 import com.example.moviecompose.screens.SavedMovieListScreen
 import com.example.moviecompose.utils.Resource
 import com.example.moviecompose.viewmodels.SavedMovieListViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SavedMovieFragment : Fragment() {
@@ -45,30 +48,30 @@ class SavedMovieFragment : Fragment() {
             }
         })
 
-        savedMovieListViewModel.deleteMovieState.observe(viewLifecycleOwner, Observer {
-            when (it){
-                is Resource.Failure -> {
-                    hideWaitDialog()
-                    Toast.makeText(
-                        context, "Cannot delete movie!",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    savedMovieListViewModel.clearDeleteMovieState()
+        viewLifecycleOwner.lifecycleScope.launch {
+            savedMovieListViewModel.deleteMovieState.collectLatest{
+                when (it) {
+                    is Resource.Failure -> {
+                        hideWaitDialog()
+                        Toast.makeText(
+                            context, "Cannot delete movie!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    is Resource.Loading -> {
+                        showWaitDialog()
+                    }
+                    is Resource.Success -> {
+                        hideWaitDialog()
+                        Toast.makeText(
+                            context, "Movie deleted!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    else -> Unit
                 }
-                is Resource.Loading -> {
-                    showWaitDialog()
-                }
-                is Resource.Success ->{
-                    hideWaitDialog()
-                    Toast.makeText(
-                        context, "Movie deleted!",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    savedMovieListViewModel.clearDeleteMovieState()
-                }
-                else -> Unit
             }
-        })
+        }
     }
 
     private lateinit var waitDialog: Dialog

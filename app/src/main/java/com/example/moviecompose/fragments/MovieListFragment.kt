@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,15 +24,29 @@ import com.example.moviecompose.utils.Resource
 import com.example.moviecompose.viewmodels.MovieListViewModel
 import com.example.moviecompose.viewmodels.SavedMovieListViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MovieListFragment : Fragment() {
     val movieListViewModel: MovieListViewModel by viewModels()
-    val savedMovieListViewModel: SavedMovieListViewModel by viewModels()
     private lateinit var waitDialog: Dialog
 
     private val movieAdapter: MovieComposeAdapter by lazy {
-        MovieComposeAdapter()
+        MovieComposeAdapter(
+            onMovieClickListener = {
+                val bundle = Bundle().apply {
+                    putInt("id", it)
+                }
+                findNavController().navigate(
+                    R.id.action_movieListFragment_to_movieDetailsFragment,
+                    bundle
+                )
+            },
+            saveMovieListener = {
+                movieListViewModel.saveMovie(it)
+            }
+        )
     }
     private val recyclerView: RecyclerView by lazy {
         RecyclerView(requireContext()).apply {
@@ -49,18 +64,6 @@ class MovieListFragment : Fragment() {
                 //MovieComposeTheme {
                     MovieListScreen(
                         //todo navController передать в констуктор
-                        movieOnClick = {
-                            val bundle = Bundle().apply {
-                                putInt("id", it)
-                            }
-                            findNavController().navigate(
-                                R.id.action_movieListFragment_to_movieDetailsFragment,
-                                bundle
-                            )
-                        },
-                        movieOnSaveClick = {
-                            savedMovieListViewModel.saveMovie(it)
-                        },
                         recyclerView = recyclerView
                     )
             }
@@ -76,31 +79,30 @@ class MovieListFragment : Fragment() {
                 movieAdapter.submitList(it.getSuccessResult().results.toMutableList())
             }
         })
-
-        savedMovieListViewModel.saveMovieState.observe(viewLifecycleOwner, Observer {
-            when (it){
-                is Resource.Failure -> {
-                    hideWaitDialog()
-                    Toast.makeText(
-                        context, "Cannot save movie!",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    savedMovieListViewModel.clearSaveMovieState()
+        viewLifecycleOwner.lifecycleScope.launch {
+            movieListViewModel.saveMovieState.collectLatest {
+                when (it){
+                    is Resource.Failure -> {
+                        hideWaitDialog()
+                        Toast.makeText(
+                            context, "Cannot save movie!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    is Resource.Loading -> {
+                        showWaitDialog()
+                    }
+                    is Resource.Success ->{
+                        hideWaitDialog()
+                        Toast.makeText(
+                            context, "Movie \"${it.getSuccessResult().title}\" saved!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    else -> Unit
                 }
-                is Resource.Loading -> {
-                    showWaitDialog()
-                }
-                is Resource.Success ->{
-                    hideWaitDialog()
-                    Toast.makeText(
-                        context, "Movie \"${it.getSuccessResult().title}\" saved!",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    savedMovieListViewModel.clearSaveMovieState()
-                }
-                else -> Unit
             }
-        })
+        }
     }
 
     private fun showWaitDialog(){

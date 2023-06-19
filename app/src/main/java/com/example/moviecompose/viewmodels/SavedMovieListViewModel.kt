@@ -8,6 +8,9 @@ import com.example.moviecompose.models.Movie
 import com.example.moviecompose.utils.Resource
 import com.example.moviecompose.repository.SavedMovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,11 +22,8 @@ class SavedMovieListViewModel @Inject constructor (
     private val _savedMovieList = MutableLiveData<Resource<ArrayList<Movie>>>(Resource.Loading)
     val savedMovieList: LiveData<Resource<ArrayList<Movie>>> =_savedMovieList
 
-    private val _saveMovieState = MutableLiveData<Resource<Movie>?>(null)
-    val saveMovieState: LiveData<Resource<Movie>?> = _saveMovieState
-
-    private val _deleteMovieState = MutableLiveData<Resource<Int>?>(null)
-    val deleteMovieState: LiveData<Resource<Int>?> = _deleteMovieState
+    private val _deleteMovieState = Channel<Resource<Int>>()
+    val deleteMovieState: Flow<Resource<Int>?> = _deleteMovieState.receiveAsFlow()
 
     init {
         getMovieList()
@@ -36,21 +36,8 @@ class SavedMovieListViewModel @Inject constructor (
     }
 
     fun deleteMovie(movieId: Int) = viewModelScope.launch {
-        _deleteMovieState.value = Resource.Loading
+        _deleteMovieState.send(Resource.Loading)
         val result = repository.deleteMovie(movieId)
-        _deleteMovieState.value = result
-    }
-
-    fun saveMovie(movie: Movie) = viewModelScope.launch {
-        _saveMovieState.value = Resource.Loading
-        val result = repository.saveMovie(movie)
-        _saveMovieState.value = result
-    }
-    fun clearSaveMovieState(){
-        _saveMovieState.value = null
-    }
-
-    fun clearDeleteMovieState(){
-        _deleteMovieState.value = null
+        _deleteMovieState.send(result)
     }
 }

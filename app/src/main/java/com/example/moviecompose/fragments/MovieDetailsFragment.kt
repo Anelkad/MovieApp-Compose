@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.example.moviecompose.R
 import com.example.moviecompose.screens.MovieDetailsKinopoisk
+import com.example.moviecompose.screens.MovieDetailsWithToolbar
 import com.example.moviecompose.utils.Resource
 import com.example.moviecompose.viewmodels.MovieDetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,7 +34,7 @@ class MovieDetailsFragment : Fragment() {
         movieViewModel.getMovie(args.id)
         movieViewModel.movieDetailsDetailsState.observe(viewLifecycleOwner, Observer {
             setContent {
-                if (it is Resource.Success) MovieDetailsKinopoisk(it.getSuccessResult())
+                if (it is Resource.Success) MovieDetailsWithToolbar(it.getSuccessResult())
 //                MovieDetailsScreen(
 //                    result = it,
 //                    onBackPress = {findNavController().popBackStack()},

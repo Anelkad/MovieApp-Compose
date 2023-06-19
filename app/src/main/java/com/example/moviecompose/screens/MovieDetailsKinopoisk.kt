@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -20,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -37,7 +39,7 @@ fun MovieDetailsKinopoisk(
         "Kino",
         "Kino original",
         "asdf ".repeat(30),
-        "12-12-2012",
+        "2012-12-12",
         "https://lumiere-a.akamaihd.net/v1/images/p_thelittlemermaid_2023_final_796_94759fcc.jpeg",
         "https://lumiere-a.akamaihd.net/v1/images/p_thelittlemermaid_2023_final_796_94759fcc.jpeg",
         5.0F,
@@ -75,245 +77,233 @@ fun MovieDetailsKinopoisk(
 }
 
 @Composable
-fun MovieDetailsKinopoiskContent(
-    movie: MovieDetails,
-    modifier: Modifier
-) { //todo разделить все на отдельные функции
-    Column(
-        modifier = modifier
+fun MovieGeneralInfo(movie: MovieDetails){
+    Text(
+        text = movie.title,
+        textAlign = TextAlign.Center,
+        fontSize = 30.sp,
+        fontWeight = FontWeight.Bold
+    )
+    Spacer(modifier = Modifier.height(5.dp))
+    Text(
+        textAlign = TextAlign.Center,
+        text = buildAnnotatedString {
+            withStyle(
+                style = SpanStyle(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                    color = colorResource(R.color.rating)
+                )
+            ) {
+                append(movie.voteAverage.toString())
+            }
+            append(" ")
+            withStyle(
+                style = SpanStyle(
+                    fontSize = 18.sp,
+                    color = Color.Gray
+                )
+            ) {
+                append(movie.voteCount.toString())
+            }
+            append(" ")
+            withStyle(
+                style = SpanStyle(
+                    fontSize = 18.sp,
+                    color = Color.Black
+                )
+            ) {
+                append(movie.originalTitle)
+            }
+        }
+    )
+
+    Text(
+        textAlign = TextAlign.Center,
+        text = buildAnnotatedString {
+            withStyle(
+                style = SpanStyle(
+                    fontSize = 18.sp,
+                    color = Color.Gray
+                )
+            ) {
+                append(movie.releaseDate.take(4))
+                append(" ")
+                append(movie.genres.map {it.name}.joinToString(", "))
+            }
+        }
+    )
+
+    Text(
+        textAlign = TextAlign.Center,
+        text = buildAnnotatedString {
+            withStyle(
+                style = SpanStyle(
+                    fontSize = 18.sp,
+                    color = Color.Gray
+                )
+            ) {
+                append(movie.productionCountries[0].name)
+                append(" ")
+                append("${movie.runtime / 60} ч ${movie.runtime % 60} мин")
+            }
+        }
+    )
+}
+
+@Composable
+fun ScheduleButton(){
+    Button(
+        onClick = {},
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.Transparent,
+            contentColor = Color.White
+        ),
+        modifier = Modifier
+            .padding(vertical = 20.dp, horizontal = 40.dp)
             .fillMaxWidth()
-            .padding(horizontal = 5.dp)
-            .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .background(
+                brush = Brush.linearGradient(
+                    colors = listOf(
+                        colorResource(R.color.orange),
+                        colorResource(R.color.orange),
+                        colorResource(R.color.orange),
+                        colorResource(R.color.orange),
+                        colorResource(R.color.orange),
+                        colorResource(R.color.orange),
+                        colorResource(R.color.light_yellow)
+                    ),
+                    start = Offset(0f, Float.POSITIVE_INFINITY),
+                    end = Offset(Float.POSITIVE_INFINITY, 0f)
+                ),
+                shape = RoundedCornerShape(50)
+            )
+            .padding(vertical = 5.dp)
+
     ) {
-        AsyncImage(
-            model = IMAGE_URL.plus(movie.posterPath),
-            placeholder = painterResource(R.drawable.loading_image),
-            contentDescription = null,
-            contentScale = ContentScale.FillWidth,
+        Icon(
+            painter = painterResource(R.drawable.baseline_local_movies_24),
+            contentDescription = "Favorite",
             modifier = Modifier
-                .padding(vertical = 5.dp)
-                .fillMaxWidth()
+                .size(30.dp)
         )
-        Spacer(modifier = Modifier.height(5.dp))
+        Spacer(modifier = Modifier.width(10.dp))
         Text(
-            text = movie.title,
-            textAlign = TextAlign.Center,
-            fontSize = 30.sp,
+            text = "Расписание и билеты",
+            fontSize = 18.sp,
             fontWeight = FontWeight.Bold
         )
-        Spacer(modifier = Modifier.height(5.dp))
-        Row {
-            Text(
-                text = movie.voteAverage.toString(),
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                color = colorResource(R.color.rating)
-            )
-            Spacer(modifier = Modifier.width(5.dp))
-            Text(
-                text = movie.voteCount.toString(),
-                fontSize = 18.sp,
-                color = Color.Gray
-            )
-            Spacer(modifier = Modifier.width(5.dp))
-            Text(
-                text = movie.originalTitle,
-                fontSize = 18.sp,
-                color = Color.Black
-            )
-        }
-        Row {
-            Text(
-                text = "${movie.releaseDate.take(4)},",
-                fontSize = 18.sp,
-                color = Color.Gray
-            )
-            Spacer(modifier = Modifier.width(5.dp))
-            Text(
-                text = movie.genres.map { it.name }.joinToString(", "),
-                fontSize = 18.sp,
-                color = Color.Gray
-            )
-        }
-        Row {
-            Text(
-                text = "${movie.productionCountries[0].name},",
-                fontSize = 18.sp,
-                color = Color.Gray
-            )
-            Spacer(modifier = Modifier.width(5.dp))
-            Text(
-                text = "${movie.runtime / 60} ч ${movie.runtime % 60} мин",
-                fontSize = 18.sp,
-                color = Color.Gray
-            )
-        }
-        Button(
-            onClick = {},
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Transparent,
-                contentColor = Color.White
-            ),
-            modifier = Modifier
-                .padding(vertical = 10.dp)
-                .background(
-                    brush = Brush.linearGradient(
-                        colors = listOf(
-                            colorResource(R.color.orange),
-                            colorResource(R.color.orange),
-                            colorResource(R.color.orange),
-                            colorResource(R.color.orange),
-                            colorResource(R.color.light_yellow)
-                        ),
-                        start = Offset(0f, Float.POSITIVE_INFINITY),
-                        end = Offset(Float.POSITIVE_INFINITY, 0f)
-                    ),
-                    shape = RoundedCornerShape(50)
-                )
+    }
+}
 
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.baseline_local_movies_24),
-                contentDescription = "Favorite",
-                modifier = Modifier
-                    .size(30.dp)
-                    .padding(horizontal = 3.dp)
-            )
-            Text(
-                modifier = Modifier.padding(5.dp),
-                text = "Расписание и билеты",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
-
-        Box(
-            modifier = Modifier.width(250.dp)
-        ) {
-            Text(
-                textAlign = TextAlign.Center,
-                text = buildAnnotatedString {
+@Composable
+fun CastInfo(){
+    Box(
+        modifier = Modifier
+            .padding(horizontal = 40.dp)
+            .fillMaxWidth()
+    ) {
+        Text(
+            textAlign = TextAlign.Center,
+            text = buildAnnotatedString {
+                withStyle(
+                    style = SpanStyle(
+                        color = Color.Gray,
+                        fontSize = 18.sp
+                    )
+                ) {
+                    append("В ролях ")
+                    append(List(4) { "qwerty" }.joinToString(", "))
                     withStyle(
                         style = SpanStyle(
-                            color = Color.Gray
+                            fontWeight = FontWeight.Bold
                         )
                     ) {
-                        append("В ролях ")
-                        append(List(4) { "qwerty" }.joinToString(", "))
-                        withStyle(
-                            style = SpanStyle(
-                                fontWeight = FontWeight.Bold
-                            )
-                        ) {
-                            append(" и другие ")
-                        }
+                        append(" и другие ")
                     }
                 }
-            )
-        }
-        Spacer(modifier = Modifier.height(20.dp))
+            }
+        )
+    }
+}
 
-        Row(
+@Composable
+fun IconButton(
+    image: Painter,
+    label: String,
+    iconPadding: Dp
+    ){
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Icon(
+            painter = image,
+            contentDescription = null,
+            tint = Color.Gray,
             modifier = Modifier
-
-                .padding(vertical = 5.dp)
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .weight(1f)
-                    .clickable { }
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.baseline_star_24),
-                    contentDescription = null,
-                    tint = Color.Gray,
-                    modifier = Modifier.size(30.dp)
-                )
-                Text(
-                    text = "Оценить",
-                    color = Color.Gray,
-                    fontSize = 13.sp,
-                    textAlign = TextAlign.Center
-                )
-            }
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .weight(1f)
-                    .clickable { }
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.baseline_bookmark_24),
-                    contentDescription = null,
-                    tint = Color.Gray,
-                    modifier = Modifier.size(30.dp)
-                )
-                Text(
-                    text = "Буду смотреть",
-                    color = Color.Gray,
-                    fontSize = 13.sp,
-                    textAlign = TextAlign.Center
-                )
-            }
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .weight(1f)
-                    .clickable { }
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.baseline_share_24),
-                    contentDescription = null,
-                    tint = Color.Gray,
-                    modifier = Modifier
-                        .size(30.dp)
-
-                )
-                Text(
-                    text = "Поделиться",
-                    color = Color.Gray,
-                    fontSize = 13.sp,
-                    textAlign = TextAlign.Center
-                )
-            }
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .weight(1f)
-                    .clickable { }
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.baseline_more_horiz_24),
-                    contentDescription = null,
-                    tint = Color.Gray,
-                    modifier = Modifier
-                        .size(30.dp)
-
-                )
-                Text(
-                    text = "Еще",
-                    color = Color.Gray,
-                    fontSize = 13.sp,
-                    textAlign = TextAlign.Center
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(20.dp))
-
+                .padding(horizontal = 15.dp)
+                .size(35.dp)
+                .padding(iconPadding)
+        )
         Text(
+            text = label,
+            color = Color.Gray,
+            fontSize = 13.sp,
+            textAlign = TextAlign.Center,
             modifier = Modifier
-                .padding(horizontal = 10.dp),
+                .padding(horizontal = 5.dp)
+        )
+    }
+}
+
+@Composable
+fun RowOfIconButton(){
+    Row(
+        modifier = Modifier
+            .padding(vertical = 20.dp)
+    ) {
+        IconButton(
+            image = painterResource(R.drawable.baseline_star_24),
+            label = "Оценить",
+            iconPadding = 3.dp
+        )
+        IconButton(
+            image = painterResource(R.drawable.baseline_bookmark_24),
+            label = "Буду смотреть",
+            iconPadding = 5.dp
+        )
+        IconButton(
+            image = painterResource(R.drawable.baseline_share_24),
+            label = "Поделиться",
+            iconPadding = 5.dp
+        )
+        IconButton(
+            image = painterResource(R.drawable.baseline_more_horiz_24),
+            label = "Еще",
+            iconPadding = 0.dp
+        )
+    }
+}
+
+@Composable
+fun MovieDetailsInfo(
+    movie: MovieDetails
+){
+    Column(
+        modifier = Modifier
+            .padding(
+                start = 20.dp,
+                end = 20.dp,
+                bottom = 20.dp
+            )
+    ) {
+        Text(
             text = movie.overview,
             textAlign = TextAlign.Left,
             fontSize = 18.sp
         )
-
-        Row(
-            modifier = Modifier.padding(10.dp)
-        ) {
+        Spacer(modifier = Modifier.height(10.dp))
+        Row{
             Text(
                 text = "Все детали о фильме",
                 color = colorResource(R.color.orange),
@@ -324,23 +314,32 @@ fun MovieDetailsKinopoiskContent(
                 painter = painterResource(R.drawable.baseline_keyboard_arrow_right_24),
                 contentDescription = null,
                 tint = colorResource(R.color.orange),
-                modifier = Modifier.size(30.dp)
+                modifier = Modifier.size(25.dp)
             )
         }
+    }
+}
 
-        Spacer(modifier = Modifier.height(20.dp))
-
+@Composable
+fun KinopoiskRatingBlock(
+    movie: MovieDetails
+){
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 20.dp)
+            .fillMaxWidth()
+    ) {
         Text(
             text = "Рейтинг Кинопоиска",
             fontWeight = FontWeight.ExtraBold,
-            fontSize = 25.sp,
-            modifier = Modifier.padding(5.dp)
+            fontSize = 23.sp
         )
+
+        Spacer(modifier = Modifier.height(10.dp))
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(10.dp)
                 .background(colorResource(R.color.light_gray)),
             horizontalAlignment = Alignment.CenterHorizontally
 
@@ -349,14 +348,12 @@ fun MovieDetailsKinopoiskContent(
                 text = movie.voteAverage.toString(),
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 70.sp,
-                modifier = Modifier,
-                color = colorResource(R.color.rating)
+                color = colorResource(R.color.rating),
+                modifier = Modifier.height(80.dp)
             )
             Text(
                 text = "${movie.voteCount} оценки",
                 fontSize = 20.sp,
-                modifier = Modifier
-                    ,
                 color = Color.Gray
             )
             Spacer(modifier = Modifier.height(10.dp))
@@ -379,7 +376,6 @@ fun MovieDetailsKinopoiskContent(
                                 colorResource(R.color.orange),
                                 colorResource(R.color.orange),
                                 colorResource(R.color.orange),
-                                colorResource(R.color.yellow),
                                 colorResource(R.color.light_yellow)
                             ),
                             start = Offset.Zero,
@@ -392,64 +388,106 @@ fun MovieDetailsKinopoiskContent(
                 Text(
                     modifier = Modifier.padding(5.dp),
                     text = "Оценить",
-                    fontSize = 20.sp,
+                    fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
             }
             Spacer(modifier = Modifier.height(20.dp))
         }
-
-        Row(
-            modifier = Modifier
-                .padding(10.dp)
-                .horizontalScroll(rememberScrollState())
-        ) {
-            Row(
-                modifier = Modifier
-                    .background(colorResource(R.color.light_gray))
-                    .padding(10.dp)
-            ) {
-                Text(
-                    text = "7.8",
-                    fontSize = 25.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    modifier = Modifier.padding(5.dp)
-                )
-                Spacer(modifier = Modifier.width(10.dp))
-                Column {
-                    Text(
-                        text = "Рейтинг IMDb"
-                    )
-                    Text(
-                        text = "747 оценок",
-                        color = Color.Gray
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.width(20.dp))
-            Row(
-                modifier = Modifier
-                    .background(colorResource(R.color.light_gray))
-                    .padding(10.dp)
-            ) {
-                Text(
-                    text = "83%",
-                    fontSize = 25.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    modifier = Modifier.padding(5.dp)
-                )
-                Spacer(modifier = Modifier.width(10.dp))
-                Text(
-                    text = "Положительных\nрецензий",
-                    lineHeight = 20.sp
-                )
-            }
-        }
-
     }
 }
 
-@Preview(showBackground = true)
+@Composable
+fun HorizontalRowOfRating(){
+    Row(
+        modifier = Modifier
+            .padding(20.dp)
+            .horizontalScroll(rememberScrollState())
+    ) {
+        Row(
+            modifier = Modifier
+                .background(colorResource(R.color.light_gray))
+                .padding(vertical = 20.dp, horizontal = 10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "7.8",
+                fontSize = 25.sp,
+                fontWeight = FontWeight.ExtraBold
+            )
+            Spacer(modifier = Modifier.width(10.dp))
+            Column {
+                Text(
+                    text = "Рейтинг IMDb"
+                )
+                Text(
+                    text = "747 оценок",
+                    color = Color.Gray
+                )
+            }
+        }
+        Spacer(modifier = Modifier.width(20.dp))
+        Row(
+            modifier = Modifier
+                .background(colorResource(R.color.light_gray))
+                .padding(vertical = 20.dp, horizontal = 10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "83%",
+                fontSize = 25.sp,
+                fontWeight = FontWeight.ExtraBold
+            )
+            Spacer(modifier = Modifier.width(10.dp))
+            Text(
+                text = "Положительных\nрецензий",
+                lineHeight = 20.sp
+            )
+        }
+    }
+}
+@Composable
+fun MovieDetailsKinopoiskContent(
+    movie: MovieDetails,
+    modifier: Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            AsyncImage(
+                model = IMAGE_URL.plus(movie.posterPath),
+                placeholder = painterResource(R.drawable.loading_image),
+                contentDescription = null,
+                contentScale = ContentScale.FillWidth,
+                modifier = Modifier
+                    .padding(10.dp)
+                    .fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(5.dp))
+
+            MovieGeneralInfo(movie)
+            ScheduleButton()
+            CastInfo()
+
+            RowOfIconButton()
+
+        }
+
+        Column {
+            MovieDetailsInfo(movie)
+            KinopoiskRatingBlock(movie)
+            HorizontalRowOfRating()
+        }
+    }
+
+}
+
+@Preview(showBackground = true, heightDp = 2000)
 @Composable
 fun MovieDetailsKinopoiskPreview() {
     MovieComposeTheme {

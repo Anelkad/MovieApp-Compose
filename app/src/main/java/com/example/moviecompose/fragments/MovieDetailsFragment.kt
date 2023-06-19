@@ -11,16 +11,12 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.moviecompose.R
 import com.example.moviecompose.screens.MovieDetailsKinopoisk
-import com.example.moviecompose.screens.MovieDetailsScreen
 import com.example.moviecompose.utils.Resource
 import com.example.moviecompose.viewmodels.MovieDetailsViewModel
-import com.example.moviecompose.viewmodels.SavedMovieListViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 

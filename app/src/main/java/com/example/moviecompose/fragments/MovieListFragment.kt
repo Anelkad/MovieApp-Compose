@@ -16,13 +16,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.moviecompose.R
-import com.example.moviecompose.adapters.MovieAdapter
 import com.example.moviecompose.adapters.MovieComposeAdapter
 import com.example.moviecompose.screens.MovieListScreen
-import com.example.moviecompose.ui.theme.MovieComposeTheme
 import com.example.moviecompose.utils.Resource
 import com.example.moviecompose.viewmodels.MovieListViewModel
-import com.example.moviecompose.viewmodels.SavedMovieListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

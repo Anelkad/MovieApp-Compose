@@ -35,6 +35,7 @@ fun MovieListItemCard(
         modifier = Modifier
             .padding(5.dp)
             .border(1.dp, Color.Black, shape = RoundedCornerShape(8.dp))
+            .padding(5.dp)
     ) {
         MovieListItemContent(
             movie = movie,

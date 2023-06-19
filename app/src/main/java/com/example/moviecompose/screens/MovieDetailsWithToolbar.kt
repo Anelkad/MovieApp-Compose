@@ -7,13 +7,10 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.TopAppBar
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
@@ -25,13 +22,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
 import com.example.moviecompose.R
 import com.example.moviecompose.models.Genre
 import com.example.moviecompose.models.MovieDetails
 import com.example.moviecompose.models.ProductionCountry
 import com.example.moviecompose.ui.theme.MovieComposeTheme
-import java.security.AllPermission
+
 
 @Composable
 fun MovieDetailsWithToolbar(
@@ -148,7 +144,7 @@ fun MovieDetailsContent(
             .verticalScroll(scroll)
     ) {
         val configuration = LocalConfiguration.current
-        Spacer(modifier = Modifier.height(configuration.screenHeightDp.dp - 30.dp))
+        Spacer(modifier = Modifier.height(configuration.screenHeightDp.dp - 56.dp))
 
         Column(
             modifier = Modifier

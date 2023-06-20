@@ -2,6 +2,10 @@ package com.example.moviecompose.screens
 
 import IMAGE_URL
 import android.graphics.ColorMatrixColorFilter
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.TopAppBar
@@ -57,15 +61,15 @@ fun MovieDetailsWithToolbar(
 
     val scroll: ScrollState = rememberScrollState(800)
 
-    val headerHeightPx = with(LocalDensity.current) { headerHeightDp.toPx()}
-    val toolbarHeightPx = with(LocalDensity.current) { toolbarHeightDp.toPx()}
+    val headerHeightPx = with(LocalDensity.current) { headerHeightDp.toPx() }
+    val toolbarHeightPx = with(LocalDensity.current) { toolbarHeightDp.toPx() }
 
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
         Header(scroll, movie.posterPath)
         MovieDetailsContent(movie, scroll)
-        Toolbar(scroll, headerHeightPx, toolbarHeightPx, movie,onBackClick)
+        Toolbar(scroll, headerHeightPx, toolbarHeightPx, movie, onBackClick)
     }
 }
 
@@ -81,49 +85,58 @@ fun Toolbar(
         mutableStateOf(headerHeightPx - toolbarHeight)
     }
 
-    val showToolbar by remember {
-        derivedStateOf { scroll.value >= toolbarBottom }
-    }
+    val alpha: Float by animateFloatAsState(
+        targetValue = if (scroll.value >= toolbarBottom) 1f else 0f,
+        animationSpec = tween(durationMillis = 300, easing = FastOutSlowInEasing)
+    )
+    val backgroundColor by animateColorAsState(
+        targetValue = if (scroll.value >= toolbarBottom) Color.White else Color.Transparent,
+        animationSpec = tween(durationMillis = 300, easing = FastOutSlowInEasing)
+    )
+
     TopAppBar(
-            title = {
-                Text(
-                    text = if (showToolbar) movie.title else "",
-                    color = Color.Black,
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+        title = {
+            Text(
+                modifier = Modifier.alpha(alpha = alpha),
+                text = movie.title,
+                color = Color.Black,
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        },
+        navigationIcon = {
+            IconButton(
+                onClick = onBackClick
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.baseline_arrow_back_24),
+                    contentDescription = null
                 )
-            },
-            navigationIcon = {
+            }
+        },
+        actions = {
+            IconButton(
+                onClick = {}
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.baseline_connected_tv_24),
+                    contentDescription = null
+                )
+            }
+            if (alpha == 1f) {
                 IconButton(
-                    onClick = onBackClick
+                    modifier = Modifier.alpha(alpha = alpha),
+                    onClick = {}
                 ) {
-                    Icon(
-                        painter = painterResource(R.drawable.baseline_arrow_back_24),
-                        contentDescription = null
-                    )
-                }
-            },
-            actions = {
-                IconButton(onClick = {}) {
-                    Icon(
-                        painter = painterResource(R.drawable.baseline_connected_tv_24),
-                        contentDescription = null
-                    )
-                }
-                if (showToolbar)
-                IconButton(onClick = {}) {
                     Icon(Icons.Default.Share, contentDescription = null)
                 }
-            },
-            modifier = Modifier.background(
-                color =  if (showToolbar) Color.White else Color.Transparent
-            ),
-            backgroundColor = Color.Transparent,
-            elevation = 0.dp
-        )
-
+            }
+        },
+        backgroundColor = backgroundColor,
+        elevation = 0.dp
+    )
 }
 
 @Composable
@@ -211,7 +224,7 @@ fun MovieDetailsContent(
         Column(
             modifier = Modifier
                 .background(Color.White)
-        )  {
+        ) {
             MovieDetailsInfo(movie)
             KinopoiskRatingBlock(movie)
             HorizontalRowOfRating()

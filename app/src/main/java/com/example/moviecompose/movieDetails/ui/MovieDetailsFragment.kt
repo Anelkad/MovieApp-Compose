@@ -1,4 +1,4 @@
-package com.example.moviecompose.fragments
+package com.example.moviecompose.movieDetails.ui
 
 import android.app.Dialog
 import android.os.Bundle
@@ -11,12 +11,12 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.moviecompose.R
-import com.example.moviecompose.screens.MovieDetailsKinopoisk
 import com.example.moviecompose.screens.MovieDetailsWithToolbar
 import com.example.moviecompose.utils.Resource
-import com.example.moviecompose.viewmodels.MovieDetailsViewModel
+import com.example.moviecompose.movieDetails.MovieDetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -34,12 +34,11 @@ class MovieDetailsFragment : Fragment() {
         movieViewModel.getMovie(args.id)
         movieViewModel.movieDetailsDetailsState.observe(viewLifecycleOwner, Observer {
             setContent {
-                if (it is Resource.Success) MovieDetailsWithToolbar(it.getSuccessResult())
-//                MovieDetailsScreen(
-//                    result = it,
-//                    onBackPress = {findNavController().popBackStack()},
-//                    movieOnSaveClick = {savedMovieListViewModel.saveMovie(it)}
-//                )
+                if (it is Resource.Success)
+                    MovieDetailsWithToolbar(
+                        movie = it.getSuccessResult(),
+                        onBackClick = {findNavController().popBackStack()}
+                    )
             }
         })
     }

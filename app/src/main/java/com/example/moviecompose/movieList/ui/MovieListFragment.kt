@@ -1,4 +1,4 @@
-package com.example.moviecompose.fragments
+package com.example.moviecompose.movieList.ui
 
 import android.app.Dialog
 import androidx.fragment.app.Fragment
@@ -17,9 +17,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.moviecompose.R
 import com.example.moviecompose.adapters.MovieComposeAdapter
+import com.example.moviecompose.adapters.PagedMovieAdapter
 import com.example.moviecompose.screens.MovieListScreen
 import com.example.moviecompose.utils.Resource
-import com.example.moviecompose.viewmodels.MovieListViewModel
+import com.example.moviecompose.movieList.MovieListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -29,8 +30,8 @@ class MovieListFragment : Fragment() {
     val movieListViewModel: MovieListViewModel by viewModels()
     private lateinit var waitDialog: Dialog
 
-    private val movieAdapter: MovieComposeAdapter by lazy {
-        MovieComposeAdapter(
+    private val movieAdapter: PagedMovieAdapter by lazy {
+        PagedMovieAdapter(
             onMovieClickListener = {
                 val bundle = Bundle().apply {
                     putInt("id", it)
@@ -69,13 +70,13 @@ class MovieListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //todo observe flow with paginated data and adapter.submitData
-        //todo paging adapter
-        movieListViewModel.movieListState.observe(viewLifecycleOwner, Observer {
-            if (it is Resource.Success){
-                movieAdapter.submitList(it.getSuccessResult().results.toMutableList())
+
+        lifecycleScope.launch {
+            movieListViewModel.pagedMovieList.collectLatest {
+                movieAdapter.submitData(it)
             }
-        })
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             movieListViewModel.saveMovieState.collectLatest {
                 when (it){

@@ -1,12 +1,12 @@
-package com.example.moviecompose.viewmodels
+package com.example.moviecompose.savedMovieList
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.moviecompose.data.SavedMovieRepository
 import com.example.moviecompose.models.Movie
 import com.example.moviecompose.utils.Resource
-import com.example.moviecompose.repository.SavedMovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow

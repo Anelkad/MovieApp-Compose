@@ -1,9 +1,9 @@
 package com.example.moviecompose.di
 
-import com.example.moviecompose.repositories.MovieRepository
-import com.example.moviecompose.repositories.MovieRepositoryImp
-import com.example.moviecompose.repository.SavedMovieRepository
-import com.example.moviecompose.repository.SavedMovieRepositoryImp
+import com.example.moviecompose.data.MovieRepository
+import com.example.moviecompose.data.MovieRepositoryImp
+import com.example.moviecompose.data.SavedMovieRepository
+import com.example.moviecompose.data.SavedMovieRepositoryImp
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

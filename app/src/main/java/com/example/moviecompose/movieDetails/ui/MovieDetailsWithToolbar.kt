@@ -1,23 +1,26 @@
 package com.example.moviecompose.screens
 
 import IMAGE_URL
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import android.graphics.ColorMatrixColorFilter
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -46,7 +49,8 @@ fun MovieDetailsWithToolbar(
         "Hello World",
         12000000,
         121
-    )
+    ),
+    onBackClick: () -> Unit = {}
 ) {
     val headerHeightDp = LocalConfiguration.current.screenHeightDp.dp
     val toolbarHeightDp = 56.dp
@@ -61,12 +65,18 @@ fun MovieDetailsWithToolbar(
     ) {
         Header(scroll, movie.posterPath)
         MovieDetailsContent(movie, scroll)
-        Toolbar(scroll, headerHeightPx, toolbarHeightPx, movie)
+        Toolbar(scroll, headerHeightPx, toolbarHeightPx, movie,onBackClick)
     }
 }
 
 @Composable
-fun Toolbar(scroll: ScrollState, headerHeightPx: Float, toolbarHeight: Float, movie: MovieDetails) {
+fun Toolbar(
+    scroll: ScrollState,
+    headerHeightPx: Float,
+    toolbarHeight: Float,
+    movie: MovieDetails,
+    onBackClick: () -> Unit
+) {
     val toolbarBottom by remember {
         mutableStateOf(headerHeightPx - toolbarHeight)
     }
@@ -74,27 +84,20 @@ fun Toolbar(scroll: ScrollState, headerHeightPx: Float, toolbarHeight: Float, mo
     val showToolbar by remember {
         derivedStateOf { scroll.value >= toolbarBottom }
     }
-
-    AnimatedVisibility(
-        visible = showToolbar,
-        enter = fadeIn(),
-        exit = fadeOut(),
-    ) {
-        TopAppBar(
+    TopAppBar(
             title = {
                 Text(
-                    text = movie.title,
+                    text = if (showToolbar) movie.title else "",
                     color = Color.Black,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             },
             navigationIcon = {
                 IconButton(
-                    onClick = {},
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .size(36.dp)
+                    onClick = onBackClick
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.baseline_arrow_back_24),
@@ -102,33 +105,69 @@ fun Toolbar(scroll: ScrollState, headerHeightPx: Float, toolbarHeight: Float, mo
                     )
                 }
             },
-            backgroundColor = Color.White
+            actions = {
+                IconButton(onClick = {}) {
+                    Icon(
+                        painter = painterResource(R.drawable.baseline_connected_tv_24),
+                        contentDescription = null
+                    )
+                }
+                if (showToolbar)
+                IconButton(onClick = {}) {
+                    Icon(Icons.Default.Share, contentDescription = null)
+                }
+            },
+            modifier = Modifier.background(
+                color =  if (showToolbar) Color.White else Color.Transparent
+            ),
+            backgroundColor = Color.Transparent,
+            elevation = 0.dp
         )
-    }
+
 }
 
 @Composable
 fun Header(scroll: ScrollState, moviePoster: String) {
-    Column(
+
+    Box(
         modifier = Modifier
-            .padding(top = 40.dp)
             .fillMaxWidth()
-            .graphicsLayer {
-                translationY = -scroll.value.toFloat() / 10f // Parallax effect
-            },
-        horizontalAlignment = Alignment.CenterHorizontally
-    ){
+    ) {
+        AsyncImage(
+            model = IMAGE_URL.plus(moviePoster),
+            placeholder = painterResource(R.drawable.loading_image),
+            contentDescription = null,
+            contentScale = ContentScale.FillWidth,
+            colorFilter = ColorFilter.colorMatrix(
+                ColorMatrix().apply {
+                    setToScale(1f, 1f, 1f, 0.5f)
+                }
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .blur(30.dp)
+        )
+        Column(
+            modifier = Modifier
+                .padding(40.dp)
+                .fillMaxWidth()
+                .graphicsLayer {
+                    translationY = -scroll.value.toFloat() / 10f // Parallax effect
+                }
+        ) {
+            Spacer(modifier = Modifier.height(40.dp))
             AsyncImage(
                 model = IMAGE_URL.plus(moviePoster),
                 placeholder = painterResource(R.drawable.loading_image),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth,
                 modifier = Modifier
-                    .padding(40.dp)
+                    .align(Alignment.CenterHorizontally)
                     .width(
                         (LocalConfiguration.current.screenWidthDp - scroll.value / 10).dp
                     )
             )
+        }
     }
 }
 
@@ -144,14 +183,24 @@ fun MovieDetailsContent(
             .verticalScroll(scroll)
     ) {
         val configuration = LocalConfiguration.current
-        Spacer(modifier = Modifier.height(configuration.screenHeightDp.dp - 56.dp))
+        Spacer(modifier = Modifier.height(configuration.screenHeightDp.dp - 30.dp))
 
         Column(
             modifier = Modifier
-                .background(Color.White),
+                .background(Color.White)
+                .padding(horizontal = 20.dp)
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(20.dp))
+
+            Box(
+                modifier = Modifier
+                    .padding(top = 10.dp, bottom = 20.dp)
+                    .background(Color.LightGray)
+                    .width(50.dp)
+                    .height(5.dp)
+            )
+
             MovieGeneralInfo(movie)
             ScheduleButton()
             CastInfo()

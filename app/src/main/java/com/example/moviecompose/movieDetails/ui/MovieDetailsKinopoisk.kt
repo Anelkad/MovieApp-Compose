@@ -19,6 +19,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -84,7 +85,7 @@ fun MovieGeneralInfo(movie: MovieDetails){
         fontSize = 30.sp,
         fontWeight = FontWeight.Bold
     )
-    Spacer(modifier = Modifier.height(5.dp))
+    Spacer(modifier = Modifier.height(10.dp))
     Text(
         textAlign = TextAlign.Center,
         text = buildAnnotatedString {
@@ -160,7 +161,7 @@ fun ScheduleButton(){
             contentColor = Color.White
         ),
         modifier = Modifier
-            .padding(vertical = 20.dp, horizontal = 40.dp)
+            .padding(vertical = 15.dp, horizontal = 20.dp)
             .fillMaxWidth()
             .background(
                 brush = Brush.linearGradient(
@@ -178,7 +179,6 @@ fun ScheduleButton(){
                 ),
                 shape = RoundedCornerShape(50)
             )
-            .padding(vertical = 5.dp)
 
     ) {
         Icon(
@@ -300,7 +300,9 @@ fun MovieDetailsInfo(
         Text(
             text = movie.overview,
             textAlign = TextAlign.Left,
-            fontSize = 18.sp
+            fontSize = 18.sp,
+            maxLines = 6,
+            overflow = TextOverflow.Ellipsis
         )
         Spacer(modifier = Modifier.height(10.dp))
         Row{
@@ -356,7 +358,7 @@ fun KinopoiskRatingBlock(
                 fontSize = 20.sp,
                 color = Color.Gray
             )
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             Button(
                 onClick = {},
                 colors = ButtonDefaults.buttonColors(
@@ -386,7 +388,6 @@ fun KinopoiskRatingBlock(
 
             ) {
                 Text(
-                    modifier = Modifier.padding(5.dp),
                     text = "Оценить",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
@@ -401,11 +402,12 @@ fun KinopoiskRatingBlock(
 fun HorizontalRowOfRating(){
     Row(
         modifier = Modifier
-            .padding(20.dp)
+            .padding(vertical = 20.dp)
             .horizontalScroll(rememberScrollState())
     ) {
         Row(
             modifier = Modifier
+                .padding(start = 20.dp)
                 .background(colorResource(R.color.light_gray))
                 .padding(vertical = 20.dp, horizontal = 10.dp),
             verticalAlignment = Alignment.CenterVertically
@@ -426,9 +428,9 @@ fun HorizontalRowOfRating(){
                 )
             }
         }
-        Spacer(modifier = Modifier.width(20.dp))
         Row(
             modifier = Modifier
+                .padding(horizontal = 20.dp)
                 .background(colorResource(R.color.light_gray))
                 .padding(vertical = 20.dp, horizontal = 10.dp),
             verticalAlignment = Alignment.CenterVertically
@@ -491,6 +493,6 @@ fun MovieDetailsKinopoiskContent(
 @Composable
 fun MovieDetailsKinopoiskPreview() {
     MovieComposeTheme {
-        MovieDetailsKinopoisk()
+        //MovieDetailsKinopoisk()
     }
 }

@@ -1,4 +1,4 @@
-package com.example.moviecompose.repository
+package com.example.moviecompose.data
 
 import com.example.moviecompose.models.Movie
 import com.example.moviecompose.utils.Resource

@@ -1,10 +1,13 @@
-package com.example.moviecompose.viewmodels
+package com.example.moviecompose.movieList
 
 import androidx.lifecycle.*
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.example.moviecompose.data.MovieRepository
+import com.example.moviecompose.data.SavedMovieRepository
+import com.example.moviecompose.models.ListItem
 import com.example.moviecompose.models.Movie
 import com.example.moviecompose.models.MovieListResponse
-import com.example.moviecompose.repositories.MovieRepository
-import com.example.moviecompose.repository.SavedMovieRepository
 import com.example.moviecompose.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -25,6 +28,9 @@ class MovieListViewModel @Inject constructor(
 
     private val _saveMovieState = Channel<Resource<Movie>>()
     val saveMovieState: Flow<Resource<Movie>?> = _saveMovieState.receiveAsFlow()
+
+    val pagedMovieList: Flow<PagingData<ListItem>> =
+        movieRepository.getPagedMovieList().cachedIn(viewModelScope)
 
     init {
         getMovieList(1)

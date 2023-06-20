@@ -1,4 +1,4 @@
-package com.example.moviecompose.repository
+package com.example.moviecompose.data
 
 import MOVIES
 import com.example.moviecompose.models.Movie

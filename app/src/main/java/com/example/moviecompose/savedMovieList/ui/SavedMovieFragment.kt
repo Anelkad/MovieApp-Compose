@@ -1,4 +1,4 @@
-package com.example.moviecompose.fragments
+package com.example.moviecompose.savedMovieList.ui
 
 import android.app.Dialog
 import android.os.Bundle
@@ -15,7 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.moviecompose.R
 import com.example.moviecompose.screens.SavedMovieListScreen
 import com.example.moviecompose.utils.Resource
-import com.example.moviecompose.viewmodels.SavedMovieListViewModel
+import com.example.moviecompose.savedMovieList.SavedMovieListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class SavedMovieFragment : Fragment() {
     val savedMovieListViewModel: SavedMovieListViewModel by viewModels()
-
+    private lateinit var waitDialog: Dialog
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -74,7 +74,6 @@ class SavedMovieFragment : Fragment() {
         }
     }
 
-    private lateinit var waitDialog: Dialog
     private fun showWaitDialog(){
         if (!this::waitDialog.isInitialized) {
             waitDialog = Dialog(requireActivity())

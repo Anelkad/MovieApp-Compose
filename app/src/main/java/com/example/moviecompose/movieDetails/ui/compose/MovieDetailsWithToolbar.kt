@@ -30,9 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.moviecompose.R
-import com.example.moviecompose.models.Genre
-import com.example.moviecompose.models.MovieDetails
-import com.example.moviecompose.models.ProductionCountry
+import com.example.moviecompose.models.*
 import com.example.moviecompose.ui.theme.MovieComposeTheme
 
 
@@ -54,6 +52,7 @@ fun MovieDetailsWithToolbar(
         12000000,
         121
     ),
+    videos: MovieVideoResponse,
     onBackClick: () -> Unit = {}
 ) {
     val headerHeightDp = LocalConfiguration.current.screenHeightDp.dp
@@ -68,7 +67,7 @@ fun MovieDetailsWithToolbar(
         modifier = Modifier.fillMaxSize()
     ) {
         Header(scroll, movie.posterPath)
-        MovieDetailsContent(movie, scroll)
+        MovieDetailsContent(movie, scroll, videos)
         Toolbar(scroll, headerHeightPx, toolbarHeightPx, movie, onBackClick)
     }
 }
@@ -188,7 +187,8 @@ fun Header(scroll: ScrollState, moviePoster: String) {
 @Composable
 fun MovieDetailsContent(
     movie: MovieDetails,
-    scroll: ScrollState
+    scroll: ScrollState,
+    videos: MovieVideoResponse
 ) {
     Column(
         modifier = Modifier
@@ -226,6 +226,7 @@ fun MovieDetailsContent(
                 .background(Color.White)
         ) {
             MovieDetailsInfo(movie)
+            VideoBlock(videos)
             KinopoiskRatingBlock(movie)
             HorizontalRowOfRating()
         }
@@ -233,10 +234,10 @@ fun MovieDetailsContent(
 
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, heightDp = 2000)
 @Composable
 fun MovieDetailsWithToolbarPreview() {
     MovieComposeTheme {
-        MovieDetailsWithToolbar()
+        //MovieDetailsWithToolbar()
     }
 }

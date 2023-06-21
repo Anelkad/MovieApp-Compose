@@ -33,18 +33,24 @@ class MovieDetailsFragment : Fragment() {
     ): View = ComposeView(requireContext()).apply {
 
         movieViewModel.getMovieDetails(args.id)
-        movieViewModel.movieDetailsDetailsState.observe(viewLifecycleOwner, Observer {
-            setContent {
-                if (it is Resource.Success)
-                    MovieDetailsWithToolbar(
-                        movie = it.getSuccessResult(),
-                        onBackClick = {findNavController().popBackStack()}
-                    )
+        movieViewModel.movieDetailsDetailsState.observe(viewLifecycleOwner, Observer { movieDetailsResource ->
+
+            if (movieDetailsResource is Resource.Success) {
+                    movieViewModel.movieVideoState.observe(viewLifecycleOwner, Observer {
+                        if (it is Resource.Success) {
+                            setContent {
+                            MovieDetailsWithToolbar(
+                                movie = movieDetailsResource.getSuccessResult(),
+                                onBackClick = { findNavController().popBackStack() },
+                                videos = it.getSuccessResult()
+                                )
+                            }
+                        }
+                    })
             }
         })
-        movieViewModel.movieVideoState.observe(viewLifecycleOwner, Observer {
-            if (it is Resource.Success) Log.d("qwerty video", it.getSuccessResult().results.size.toString())
-        })
+
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

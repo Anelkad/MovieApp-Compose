@@ -1,8 +1,14 @@
 package com.example.moviecompose.screens
 
 import IMAGE_URL
+import android.view.ViewGroup
+import android.webkit.WebChromeClient
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -25,11 +31,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import coil.compose.AsyncImage
 import com.example.moviecompose.R
-import com.example.moviecompose.models.Genre
-import com.example.moviecompose.models.MovieDetails
-import com.example.moviecompose.models.ProductionCountry
+import com.example.moviecompose.models.*
 import com.example.moviecompose.ui.theme.MovieComposeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -448,6 +453,94 @@ fun HorizontalRowOfRating(){
         }
     }
 }
+
+
+@Composable
+fun Video(video: Video){
+    val url = "https://www.youtube.com/watch?v=${video.key}"
+    //val url = "https://www.youtube.com/"
+    AndroidView(factory = {
+        WebView(it).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                700,
+                800
+            )
+            webViewClient = WebViewClient()
+            settings.javaScriptEnabled = true
+            webChromeClient = WebChromeClient()
+        }
+    }, update = {
+        it.loadUrl(url)
+    })
+}
+
+@Composable
+fun VideoItem(video: Video){
+    Column(
+        modifier = Modifier
+            .padding(start = 20.dp)
+            .width(250.dp)
+    ){
+        Video(video)
+        Text(
+            text = video.name,
+            fontWeight = FontWeight.Medium,
+            maxLines = 1
+        )
+        Text(
+            text = video.published_at.take(10),
+            color = Color.Gray
+        )
+    }
+}
+
+@Composable
+fun VideoBlock(videoResponse: MovieVideoResponse){
+    Column(
+        modifier = Modifier
+            .padding(top = 20.dp)
+            .fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "Трейлеры и тизеры",
+                fontWeight = FontWeight.ExtraBold,
+                fontSize = 23.sp,
+                modifier = Modifier.padding(start = 20.dp)
+            )
+            Row{
+                Text(
+                    text = videoResponse.results.size.toString(),
+                    color = colorResource(R.color.orange),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                )
+                Icon(
+                    painter = painterResource(R.drawable.baseline_keyboard_arrow_right_24),
+                    contentDescription = null,
+                    tint = colorResource(R.color.orange),
+                    modifier = Modifier
+                        .size(30.dp)
+                )
+                Spacer(modifier = Modifier.width(5.dp))
+            }
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        LazyRow{
+            items(items = videoResponse.results) { video ->
+                VideoItem(video)
+            }
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+    }
+}
+
 @Composable
 fun MovieDetailsKinopoiskContent(
     movie: MovieDetails,

@@ -1,6 +1,5 @@
 package com.example.moviecompose.di
 
-import com.example.moviecompose.data.*
 import com.example.moviecompose.movieDetails.data.repository.MovieDetailsRepositoryImp
 import com.example.moviecompose.movieDetails.domain.repository.MovieDetailsRepository
 import com.example.moviecompose.movieList.data.repository.MovieListRepositoryImp

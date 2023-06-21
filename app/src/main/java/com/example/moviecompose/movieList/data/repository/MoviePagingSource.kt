@@ -1,4 +1,4 @@
-package com.example.moviecompose.data
+package com.example.moviecompose.movieList.data.repository
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState

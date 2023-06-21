@@ -4,10 +4,10 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.moviecompose.models.Ad
 import com.example.moviecompose.models.ListItem
-import com.example.okhttp.api.RetrofitService
+import com.example.moviecompose.apiClient.ApiClient
 
 class MoviePagingSource(
-    private val service: RetrofitService
+    private val service: ApiClient
 ) : PagingSource<Int, ListItem>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ListItem> {

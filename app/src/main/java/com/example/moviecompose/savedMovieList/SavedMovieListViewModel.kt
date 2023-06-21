@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.moviecompose.data.SavedMovieRepository
+import com.example.moviecompose.savedMovieList.domain.repository.SavedMovieRepository
 import com.example.moviecompose.models.Movie
 import com.example.moviecompose.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel

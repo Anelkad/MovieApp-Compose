@@ -1,7 +1,8 @@
-package com.example.moviecompose.data
+package com.example.moviecompose.savedMovieList.data.repository
 
 import MOVIES
 import com.example.moviecompose.models.Movie
+import com.example.moviecompose.savedMovieList.domain.repository.SavedMovieRepository
 import com.example.moviecompose.utils.Resource
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError

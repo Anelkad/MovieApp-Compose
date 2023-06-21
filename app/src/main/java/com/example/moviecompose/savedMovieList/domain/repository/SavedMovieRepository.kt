@@ -1,4 +1,4 @@
-package com.example.moviecompose.data
+package com.example.moviecompose.savedMovieList.domain.repository
 
 import com.example.moviecompose.models.Movie
 import com.example.moviecompose.utils.Resource

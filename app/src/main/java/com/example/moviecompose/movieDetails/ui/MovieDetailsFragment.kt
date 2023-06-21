@@ -2,6 +2,7 @@ package com.example.moviecompose.movieDetails.ui
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -31,7 +32,7 @@ class MovieDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
 
-        movieViewModel.getMovie(args.id)
+        movieViewModel.getMovieDetails(args.id)
         movieViewModel.movieDetailsDetailsState.observe(viewLifecycleOwner, Observer {
             setContent {
                 if (it is Resource.Success)
@@ -40,6 +41,9 @@ class MovieDetailsFragment : Fragment() {
                         onBackClick = {findNavController().popBackStack()}
                     )
             }
+        })
+        movieViewModel.movieVideoState.observe(viewLifecycleOwner, Observer {
+            if (it is Resource.Success) Log.d("qwerty video", it.getSuccessResult().results.size.toString())
         })
     }
 

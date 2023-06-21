@@ -1,7 +1,7 @@
 package com.example.moviecompose.di
 
 import FIREBASE_URL
-import com.example.okhttp.api.RetrofitService
+import com.example.moviecompose.apiClient.ApiClient
 import com.google.firebase.database.FirebaseDatabase
 import dagger.Module
 import dagger.Provides
@@ -17,5 +17,5 @@ object AppModule {
     fun provideFirebaseDatabase(): FirebaseDatabase = FirebaseDatabase.getInstance(FIREBASE_URL)
     @Provides
     @Singleton
-    fun provideService(): RetrofitService = RetrofitService()
+    fun provideService(): ApiClient = ApiClient()
 }

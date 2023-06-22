@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.moviecompose.models.Ad
 import com.example.moviecompose.models.ListItem
 import com.example.moviecompose.models.Movie
-import com.example.moviecompose.movieList.ui.AdListItemCard
-import com.example.moviecompose.screens.MovieListItemCard
+import com.example.moviecompose.movieList.ui.compose.AdListItemCard
+import com.example.moviecompose.movieList.ui.compose.MovieListItemCard
 
 class PagedMovieAdapter(
     private val onMovieClickListener: ((Int) -> Unit),

@@ -1,4 +1,4 @@
-package com.example.moviecompose.screens
+package com.example.moviecompose.movieList.ui.compose
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable

@@ -1,7 +1,6 @@
-package com.example.moviecompose.screens
+package com.example.moviecompose.movieDetails.ui.compose
 
 import IMAGE_URL
-import android.graphics.ColorMatrixColorFilter
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -19,7 +18,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -52,7 +50,23 @@ fun MovieDetailsWithToolbar(
         12000000,
         121
     ),
-    videos: MovieVideoResponse,
+    videos: MovieVideoResponse = MovieVideoResponse(
+        1,
+        List(5){
+            Video(
+                "1",
+                "d",
+                "1",
+                "jUV5iWAqyCA",
+                "Video",
+                true,
+                "ewf",
+                "feq",
+                1000,
+                "dqw"
+            )
+        }
+    ),
     onBackClick: () -> Unit = {}
 ) {
     val headerHeightDp = LocalConfiguration.current.screenHeightDp.dp
@@ -238,6 +252,6 @@ fun MovieDetailsContent(
 @Composable
 fun MovieDetailsWithToolbarPreview() {
     MovieComposeTheme {
-        //MovieDetailsWithToolbar()
+        MovieDetailsWithToolbar()
     }
 }

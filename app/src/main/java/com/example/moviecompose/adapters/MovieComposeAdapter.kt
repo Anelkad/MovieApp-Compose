@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moviecompose.models.Movie
-import com.example.moviecompose.screens.MovieListItemCard
+import com.example.moviecompose.movieList.ui.compose.MovieListItemCard
 
 class MovieComposeAdapter(
     private val onMovieClickListener: ((Int) -> Unit),

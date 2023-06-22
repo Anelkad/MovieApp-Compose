@@ -1,4 +1,4 @@
-package com.example.moviecompose.movieList.ui
+package com.example.moviecompose.movieList.ui.compose
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*

@@ -1,4 +1,4 @@
-package com.example.moviecompose.screens
+package com.example.moviecompose.movieDetails.ui.compose
 
 import IMAGE_URL
 import android.view.ViewGroup
@@ -36,51 +36,6 @@ import coil.compose.AsyncImage
 import com.example.moviecompose.R
 import com.example.moviecompose.models.*
 import com.example.moviecompose.ui.theme.MovieComposeTheme
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MovieDetailsKinopoisk(
-    movie: MovieDetails = MovieDetails(
-        1,
-        "Kino",
-        "Kino original",
-        "asdf ".repeat(30),
-        "2012-12-12",
-        "https://lumiere-a.akamaihd.net/v1/images/p_thelittlemermaid_2023_final_796_94759fcc.jpeg",
-        "https://lumiere-a.akamaihd.net/v1/images/p_thelittlemermaid_2023_final_796_94759fcc.jpeg",
-        5.0F,
-        120,
-        listOf(ProductionCountry("JP", "Japan")),
-        listOf(Genre(16, "мультфильм"), Genre(18, "анимация")),
-        "Hello World",
-        12000000,
-        121
-    )
-) {
-    Scaffold(
-        topBar = {
-            SmallTopAppBar(
-                title = {},
-                navigationIcon = {
-                    IconButton(
-                        onClick = {}
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.baseline_arrow_back_24),
-                            contentDescription = "Back",
-                            modifier = Modifier.size(25.dp)
-                        )
-                    }
-                }
-            )
-        }
-    ) { contentPadding ->
-        MovieDetailsKinopoiskContent(
-            movie = movie,
-            modifier = Modifier.padding(contentPadding)
-        )
-    }
-}
 
 @Composable
 fun MovieGeneralInfo(movie: MovieDetails){
@@ -456,14 +411,13 @@ fun HorizontalRowOfRating(){
 
 
 @Composable
-fun Video(video: Video){
+fun VideoContent(video: Video){
     val url = "https://www.youtube.com/watch?v=${video.key}"
-    //val url = "https://www.youtube.com/"
     AndroidView(factory = {
         WebView(it).apply {
             layoutParams = ViewGroup.LayoutParams(
-                700,
-                800
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                500
             )
             webViewClient = WebViewClient()
             settings.javaScriptEnabled = true
@@ -481,11 +435,12 @@ fun VideoItem(video: Video){
             .padding(start = 20.dp)
             .width(250.dp)
     ){
-        Video(video)
+        VideoContent(video)
         Text(
             text = video.name,
             fontWeight = FontWeight.Medium,
-            maxLines = 1
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
         Text(
             text = video.published_at.take(10),
@@ -531,7 +486,10 @@ fun VideoBlock(videoResponse: MovieVideoResponse){
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        LazyRow{
+        LazyRow(
+            modifier = Modifier
+                .padding(vertical = 10.dp)
+        ){
             items(items = videoResponse.results) { video ->
                 VideoItem(video)
             }

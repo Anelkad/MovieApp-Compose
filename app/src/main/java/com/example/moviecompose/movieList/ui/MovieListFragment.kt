@@ -3,46 +3,49 @@ package com.example.moviecompose.movieList.ui
 import android.app.Dialog
 import androidx.fragment.app.Fragment
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.moviecompose.R
-import com.example.moviecompose.adapters.MovieComposeAdapter
 import com.example.moviecompose.adapters.PagedMovieAdapter
-import com.example.moviecompose.screens.MovieListScreen
-import com.example.moviecompose.utils.Resource
-import com.example.moviecompose.movieList.MovieListViewModel
+import com.example.moviecompose.movieList.ui.compose.MovieListScreen
+import com.example.moviecompose.movieList.ui.compose.ProgressBar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MovieListFragment : Fragment() {
-    val movieListViewModel: MovieListViewModel by viewModels()
+    val movieListViewModel: MovieListViewModelMVI by viewModels()
     private lateinit var waitDialog: Dialog
 
     private val movieAdapter: PagedMovieAdapter by lazy {
         PagedMovieAdapter(
             onMovieClickListener = {
-                val bundle = Bundle().apply {
-                    putInt("id", it)
-                }
-                findNavController().navigate(
-                    R.id.action_movieListFragment_to_movieDetailsFragment,
-                    bundle
+                movieListViewModel.obtainEvent(
+                    MovieListEvent.ShowMovieDetails(
+                        it,
+                        findNavController()
+                    ),
                 )
             },
             saveMovieListener = {
-                movieListViewModel.saveMovie(it)
+                movieListViewModel.obtainEvent(
+                    MovieListEvent.SaveMovie(
+                        it,
+                        requireContext()
+                    )
+                )
             }
         )
     }
@@ -58,14 +61,25 @@ class MovieListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
-        setContent {
-                //MovieComposeTheme {
-                    MovieListScreen(
-                        //todo navController передать в констуктор
-                        recyclerView = recyclerView
-                    )
-            }
+                setContent {
+                    val uiState = movieListViewModel.movieListUiState.observeAsState()
 
+                    when (uiState.value){
+                        is MovieListUIState.Loading -> {
+                            //todo progress bar не показывается
+                            Log.d("qwerty","Loading")
+                            ProgressBar()
+                        }
+                        is MovieListUIState.Success -> MovieListScreen(
+                            recyclerView = recyclerView
+                        )
+                        else -> {}
+                    }
+
+                    LaunchedEffect(key1 = uiState, block = {
+                        movieListViewModel.obtainEvent(event = MovieListEvent.EnterMovieListScreen)
+                    })
+                }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -77,30 +91,30 @@ class MovieListFragment : Fragment() {
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            movieListViewModel.saveMovieState.collectLatest {
-                when (it){
-                    is Resource.Failure -> {
-                        hideWaitDialog()
-                        Toast.makeText(
-                            context, "Cannot save movie!",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-                    is Resource.Loading -> {
-                        showWaitDialog()
-                    }
-                    is Resource.Success ->{
-                        hideWaitDialog()
-                        Toast.makeText(
-                            context, "Movie \"${it.getSuccessResult().title}\" saved!",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-                    else -> Unit
-                }
-            }
-        }
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            movieListViewModel.saveMovieState.collectLatest {
+//                when (it){
+//                    is Resource.Failure -> {
+//                        hideWaitDialog()
+//                        Toast.makeText(
+//                            context, "Cannot save movie!",
+//                            Toast.LENGTH_LONG
+//                        ).show()
+//                    }
+//                    is Resource.Loading -> {
+//                        showWaitDialog()
+//                    }
+//                    is Resource.Success ->{
+//                        hideWaitDialog()
+//                        Toast.makeText(
+//                            context, "Movie \"${it.getSuccessResult().title}\" saved!",
+//                            Toast.LENGTH_LONG
+//                        ).show()
+//                    }
+//                    else -> Unit
+//                }
+//            }
+//        }
     }
 
     private fun showWaitDialog(){

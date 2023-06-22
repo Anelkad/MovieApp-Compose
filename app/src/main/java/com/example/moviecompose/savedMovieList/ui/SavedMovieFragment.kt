@@ -13,7 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.moviecompose.R
-import com.example.moviecompose.screens.SavedMovieListScreen
+import com.example.moviecompose.savedMovieList.ui.compose.SavedMovieListScreen
 import com.example.moviecompose.utils.Resource
 import com.example.moviecompose.savedMovieList.SavedMovieListViewModel
 import dagger.hilt.android.AndroidEntryPoint

@@ -1,4 +1,4 @@
-package com.example.moviecompose.screens
+package com.example.moviecompose.movieList.ui.compose
 
 import IMAGE_URL
 import androidx.compose.foundation.border

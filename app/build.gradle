@@ -8,6 +8,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        release {
+        storeFile file('/Users/anelkadyrova/Desktop/keyStore.jks')
+            storePassword '16anel16'
+            keyAlias 'key0'
+            keyPassword '16anel16'
+        }
+    }
     namespace 'com.example.moviecompose'
     compileSdk 33
 
@@ -22,7 +30,7 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
-        signingConfig signingConfigs.debug
+        signingConfig signingConfigs.release
     }
 
     buildTypes {

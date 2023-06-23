@@ -4,17 +4,17 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.moviecompose.models.Ad
 import com.example.moviecompose.models.ListItem
-import com.example.moviecompose.apiClient.ApiClient
+import com.example.moviecompose.movieList.data.remote.MovieListDataSource
 
 class MoviePagingSource(
-    private val service: ApiClient
+    private val dataSource: MovieListDataSource
 ) : PagingSource<Int, ListItem>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ListItem> {
 
         return try {
             val nextPage = params.key ?: 1
-            val movieListResponse = service.getMovieList(nextPage)
+            val movieListResponse = dataSource.getMovieList(nextPage)
 
             val ad = Ad("1Fit",
                 "Абонемент на все виды спорта",

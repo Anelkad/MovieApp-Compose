@@ -486,15 +486,16 @@ fun VideoBlock(videoResponse: MovieVideoResponse){
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        LazyRow(
+        Row(
             modifier = Modifier
                 .padding(vertical = 10.dp)
+                .horizontalScroll(rememberScrollState())
         ){
-            items(items = videoResponse.results) { video ->
+            videoResponse.results.forEach{
+                video ->
                 VideoItem(video)
             }
         }
-
         Spacer(modifier = Modifier.height(20.dp))
     }
 }

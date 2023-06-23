@@ -16,7 +16,6 @@ import androidx.navigation.fragment.navArgs
 import com.example.moviecompose.R
 import com.example.moviecompose.movieDetails.ui.compose.MovieDetailsWithToolbar
 import com.example.moviecompose.utils.Resource
-import com.example.moviecompose.movieDetails.MovieDetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

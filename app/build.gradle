@@ -10,10 +10,15 @@ plugins {
 android {
     signingConfigs {
         release {
-        storeFile file('/Users/anelkadyrova/Desktop/keyStore.jks')
-            storePassword '16anel16'
-            keyAlias 'key0'
-            keyPassword '16anel16'
+            try {
+                storeFile file('/Users/anelkadyrova/Desktop/keyStore.jks')
+                storePassword KEYSTORE_PASSWORD
+                keyAlias 'key0'
+                keyPassword KEY_PASSWORD
+            }
+            catch(exception){
+                throw new InvalidUserDataException("You should define KEYSTORE_PASSWORD and KEY_PASSWORD in gradle.properties.")
+            }
         }
     }
     namespace 'com.example.moviecompose'

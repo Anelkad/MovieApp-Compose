@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.moviecompose.R
 import com.example.moviecompose.movieDetails.ui.compose.MovieDetailsWithToolbar
+import com.example.moviecompose.movieDetails.ui.compose.ProgressBar
 import com.example.moviecompose.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -29,13 +30,14 @@ class MovieDetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
-
-
         //todo viewState (loading progress bar)
         movieViewModel.getMovieDetails(args.id)
         //todo observer внутри observer
         movieViewModel.movieDetailsDetailsState.observe(viewLifecycleOwner, Observer { movieDetailsResource ->
-
+            if (movieDetailsResource is Resource.Loading)
+                setContent {
+                    ProgressBar()
+                }
             if (movieDetailsResource is Resource.Success) {
                     movieViewModel.movieVideoState.observe(viewLifecycleOwner, Observer {
                         if (it is Resource.Success) {

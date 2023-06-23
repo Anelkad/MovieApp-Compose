@@ -69,11 +69,11 @@ dependencies {
     //Dagger Hilt
     implementation 'javax.inject:javax.inject:1'
     implementation 'com.google.dagger:dagger:2.43.2'
-    implementation 'com.google.firebase:firebase-database-ktx:20.0.4'
     kapt 'com.google.dagger:dagger-compiler:2.43.2'
     implementation("com.google.dagger:hilt-android:2.44")
     kapt 'com.google.dagger:hilt-android-compiler:2.44'
-    
+
+    implementation 'com.google.firebase:firebase-database-ktx:20.0.4'
     //Fragments
     implementation "androidx.core:core-ktx:$core"
     implementation "androidx.appcompat:appcompat:$appcompat"

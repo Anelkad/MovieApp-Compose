@@ -8,11 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.CombinedLoadStates
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -61,25 +64,21 @@ class MovieListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
-                setContent {
-                    val uiState = movieListViewModel.movieListUiState.observeAsState()
+        setContent {
+            val uiState = movieListViewModel.movieListUiState.observeAsState()
 
-                    when (uiState.value){
-                        is MovieListUIState.Loading -> {
-                            //todo progress bar не показывается
-                            Log.d("qwerty","Loading")
-                            ProgressBar()
-                        }
-                        is MovieListUIState.Success -> MovieListScreen(
-                            recyclerView = recyclerView
-                        )
-                        else -> {}
-                    }
-
-                    LaunchedEffect(key1 = uiState, block = {
-                        movieListViewModel.obtainEvent(event = MovieListEvent.EnterMovieListScreen)
-                    })
+            when (uiState.value) {
+                is MovieListUIState.Loading -> {
+                    ProgressBar()
                 }
+                is MovieListUIState.Success -> {
+                    MovieListScreen(
+                        recyclerView = recyclerView
+                    )
+                }
+                else -> {}
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -88,6 +87,16 @@ class MovieListFragment : Fragment() {
         lifecycleScope.launch {
             movieListViewModel.pagedMovieList.collectLatest {
                 movieAdapter.submitData(it)
+            }
+        }
+
+        lifecycleScope.launch {
+            movieAdapter.loadStateFlow.collectLatest { loadState ->
+                if (loadState.source.refresh is LoadState.Loading) {
+                    movieListViewModel.obtainEvent(MovieListEvent.StartLoading)
+                } else {
+                    movieListViewModel.obtainEvent(MovieListEvent.StopLoading)
+                }
             }
         }
 
@@ -117,7 +126,7 @@ class MovieListFragment : Fragment() {
 //        }
     }
 
-    private fun showWaitDialog(){
+    private fun showWaitDialog() {
         if (!this::waitDialog.isInitialized) {
             waitDialog = Dialog(requireActivity())
             waitDialog.setContentView(R.layout.wait_dialog)
@@ -128,7 +137,7 @@ class MovieListFragment : Fragment() {
         if (!waitDialog.isShowing) waitDialog.show()
     }
 
-    private fun hideWaitDialog(){
+    private fun hideWaitDialog() {
         if (this::waitDialog.isInitialized or waitDialog.isShowing) waitDialog.dismiss()
     }
 }

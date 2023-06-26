@@ -2,7 +2,7 @@ package com.example.moviecompose.models
 
 import com.google.gson.annotations.SerializedName
 
-
+//todo DTO
 data class MovieDetails(
     val id: Int,
     val title: String,

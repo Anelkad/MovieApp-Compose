@@ -4,6 +4,7 @@ import com.example.moviecompose.movieDetails.data.repository.MovieDetailsReposit
 import com.example.moviecompose.movieDetails.domain.repository.MovieDetailsRepository
 import com.example.moviecompose.movieList.data.repository.MovieListRepositoryImp
 import com.example.moviecompose.movieList.domain.repository.MovieListRepository
+import com.example.moviecompose.savedMovieList.data.remote.SavedMovieService
 import com.example.moviecompose.savedMovieList.data.repository.SavedMovieRepositoryImp
 import com.example.moviecompose.savedMovieList.domain.repository.SavedMovieRepository
 import dagger.Binds

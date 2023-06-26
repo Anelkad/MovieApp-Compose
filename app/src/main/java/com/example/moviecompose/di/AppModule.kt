@@ -36,10 +36,12 @@ object AppModule {
             .build()
     }
     @Provides
+    @Singleton
     fun provideMovieListService(retrofit: Retrofit): MovieListApiService =
         retrofit.create(MovieListApiService::class.java)
 
     @Provides
+    @Singleton
     fun provideMovieDetailsService(retrofit: Retrofit): MovieDetailsApiService =
         retrofit.create(MovieDetailsApiService::class.java)
 

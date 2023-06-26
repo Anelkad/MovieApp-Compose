@@ -33,6 +33,7 @@ class MovieDetailsFragment : Fragment() {
         //todo viewState (loading progress bar)
         movieViewModel.getMovieDetails(args.id)
         //todo observer внутри observer
+        //todo combine state??
         movieViewModel.movieDetailsDetailsState.observe(viewLifecycleOwner, Observer { movieDetailsResource ->
             if (movieDetailsResource is Resource.Loading)
                 setContent {

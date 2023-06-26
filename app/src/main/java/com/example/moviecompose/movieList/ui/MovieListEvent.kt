@@ -5,7 +5,7 @@ import androidx.navigation.NavController
 import com.example.moviecompose.models.Movie
 
 sealed class MovieListEvent {
-    data class ShowMovieDetails(
+    data class OpenMovieDetails(
         var movieId: Int,
         var navController: NavController
     ) : MovieListEvent()
@@ -14,7 +14,5 @@ sealed class MovieListEvent {
         var movie: Movie,
         var context: Context
     ) : MovieListEvent()
-
-    object StartLoading : MovieListEvent()
-    object StopLoading : MovieListEvent()
+    object ShowMovieList : MovieListEvent()
 }

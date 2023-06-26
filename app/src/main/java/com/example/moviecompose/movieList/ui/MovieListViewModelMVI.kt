@@ -1,10 +1,7 @@
 package com.example.moviecompose.movieList.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -15,9 +12,10 @@ import com.example.moviecompose.movieList.domain.repository.MovieListRepository
 import com.example.moviecompose.savedMovieList.domain.repository.SavedMovieRepository
 import com.example.moviecompose.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,23 +25,32 @@ class MovieListViewModelMVI @Inject constructor(
     private val savedMovieRepository: SavedMovieRepository
 ) : ViewModel(), EventHandler<MovieListEvent> {
 
-    private var _movieListUiState: MutableLiveData<MovieListUIState> =
-        MutableLiveData(MovieListUIState.Loading)
-    var movieListUiState: LiveData<MovieListUIState> = _movieListUiState
+    private var _movieListUiState = MutableStateFlow(MovieListUIState())
+    var movieListUiState: StateFlow<MovieListUIState> = _movieListUiState.asStateFlow()
 
+    //todo pagedMovieList перенести в state
     val pagedMovieList: Flow<PagingData<ListItem>> =
         movieListRepository.getPagedMovieList().cachedIn(viewModelScope)
 
+    init {
+        _movieListUiState.value = MovieListUIState(
+            pagedMovieList = null,
+            isLoading = true,
+            error = null
+        )
+    }
+
     override fun obtainEvent(event: MovieListEvent) {
         when (event) {
-//            MovieListEvent.EnterMovieListScreen -> fetchMovieList()
-            is MovieListEvent.ShowMovieDetails -> showMovieDetails(event)
+            is MovieListEvent.OpenMovieDetails -> showMovieDetails(event)
             is MovieListEvent.SaveMovie -> saveMovie(event)
-            MovieListEvent.StartLoading -> {
-                _movieListUiState.postValue(MovieListUIState.Loading)
-            }
-            MovieListEvent.StopLoading -> {
-                _movieListUiState.postValue(MovieListUIState.Success)
+            is MovieListEvent.ShowMovieList -> {
+                _movieListUiState.value =
+                    _movieListUiState.value.copy(
+                        pagedMovieList = movieListRepository.getPagedMovieList().cachedIn(viewModelScope),
+                        isLoading = false,
+                        error = null
+                    )
             }
         }
     }
@@ -60,7 +67,7 @@ class MovieListViewModelMVI @Inject constructor(
         }
     }
 
-    private fun showMovieDetails(event: MovieListEvent.ShowMovieDetails) {
+    private fun showMovieDetails(event: MovieListEvent.OpenMovieDetails) {
         event.navController.navigate(
             R.id.action_movieListFragment_to_movieDetailsFragment,
             Bundle().apply {

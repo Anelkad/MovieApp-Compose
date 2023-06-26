@@ -7,14 +7,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -36,7 +34,7 @@ class MovieListFragment : Fragment() {
         PagedMovieAdapter(
             onMovieClickListener = {
                 movieListViewModel.obtainEvent(
-                    MovieListEvent.ShowMovieDetails(
+                    MovieListEvent.OpenMovieDetails(
                         it,
                         findNavController()
                     ),
@@ -65,19 +63,15 @@ class MovieListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
         setContent {
-            val uiState = movieListViewModel.movieListUiState.observeAsState()
+            val uiState by movieListViewModel.movieListUiState.collectAsState()
 
-            when (uiState.value) {
-                is MovieListUIState.Loading -> {
+            if (uiState.isLoading)
                     ProgressBar()
-                }
-                is MovieListUIState.Success -> {
-                    MovieListScreen(
-                        recyclerView = recyclerView
-                    )
-                }
-                else -> {}
-            }
+            else
+                MovieListScreen(
+                    recyclerView = recyclerView
+                )
+
         }
     }
 
@@ -90,15 +84,11 @@ class MovieListFragment : Fragment() {
             }
         }
 
-        lifecycleScope.launch {
-            movieAdapter.loadStateFlow.collectLatest { loadState ->
-                if (loadState.source.refresh is LoadState.Loading) {
-                    movieListViewModel.obtainEvent(MovieListEvent.StartLoading)
-                } else {
-                    movieListViewModel.obtainEvent(MovieListEvent.StopLoading)
-                }
+            movieAdapter.addLoadStateListener{ loadState ->
+            if (loadState.refresh !is LoadState.Loading)
+                    movieListViewModel.obtainEvent(MovieListEvent.ShowMovieList)
             }
-        }
+
 
 //        viewLifecycleOwner.lifecycleScope.launch {
 //            movieListViewModel.saveMovieState.collectLatest {

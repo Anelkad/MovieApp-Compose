@@ -27,15 +27,19 @@ class MovieListViewModel @Inject constructor(
     }
     override fun handleEvent(event: MovieListEvent) {
         when (event) {
-            is MovieListEvent.Initial -> getMovieList()
+            //is MovieListEvent.Initial -> getMovieList()
             is MovieListEvent.OnMovieClick -> showMovieDetails(event)
             is MovieListEvent.OnSaveMovieClick -> saveMovie(event)
+            else -> {}
         }
     }
 
 //    val pagedMovieList: Flow<PagingData<ListItem>> =
 //        movieListRepository.getPagedMovieList().cachedIn(viewModelScope)
 
+    init {
+        getMovieList()
+    }
     private fun getMovieList() {
         viewModelScope.launch {
             setState { MovieListUIState.Loading }

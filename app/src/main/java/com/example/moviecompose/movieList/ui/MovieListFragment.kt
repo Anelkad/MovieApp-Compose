@@ -49,6 +49,7 @@ class MovieListFragment : Fragment() {
             }
         )
     }
+
     private val recyclerView: RecyclerView by lazy {
         RecyclerView(requireContext()).apply {
             adapter = movieAdapter

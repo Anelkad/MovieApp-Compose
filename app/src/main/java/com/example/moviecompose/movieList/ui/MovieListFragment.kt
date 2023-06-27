@@ -3,13 +3,15 @@ package com.example.moviecompose.movieList.ui
 import android.app.Dialog
 import androidx.fragment.app.Fragment
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -22,12 +24,13 @@ import com.example.moviecompose.adapters.PagedMovieAdapter
 import com.example.moviecompose.movieList.ui.compose.MovieListScreen
 import com.example.moviecompose.movieList.ui.compose.ProgressBar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MovieListFragment : Fragment() {
-    val movieListViewModel: MovieListViewModelMVI by viewModels()
+    private val movieListViewModel: MovieListViewModel by viewModels()
     private lateinit var waitDialog: Dialog
 
     private val movieAdapter: PagedMovieAdapter by lazy {
@@ -65,29 +68,42 @@ class MovieListFragment : Fragment() {
         setContent {
             val uiState by movieListViewModel.movieListUiState.collectAsState()
 
-            if (uiState.isLoading)
+            val coroutineScope = rememberCoroutineScope()
+            when (val state = uiState) {
+                MovieListUIState.Loading -> {
                     ProgressBar()
-            else
-                MovieListScreen(
-                    recyclerView = recyclerView
-                )
-
+                }
+                is MovieListUIState.Data -> {
+                    LaunchedEffect(key1 = Unit) {
+                        coroutineScope.launch {
+                            movieAdapter.submitData(state.pagingData)
+                        }
+                    }
+                    MovieListScreen(recyclerView = recyclerView)
+                }
+                is MovieListUIState.Error -> TODO()
+            }
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        lifecycleScope.launch {
-            movieListViewModel.pagedMovieList.collectLatest {
-                movieAdapter.submitData(it)
-            }
-        }
+//        lifecycleScope.launch {
+//            movieListViewModel.movieListUiState.collectLatest { state ->
+//                when (state) {
+//                    is MovieListUIState.Data -> {
+//                        movieAdapter.submitData(state.pagingData)
+//                    }
+//                    else -> Unit
+//                }
+//            }
+//        }
 
-            movieAdapter.addLoadStateListener{ loadState ->
-            if (loadState.refresh !is LoadState.Loading)
-                    movieListViewModel.obtainEvent(MovieListEvent.ShowMovieList)
-            }
+//            movieAdapter.addLoadStateListener{ loadState ->
+//            if (loadState.refresh !is LoadState.Loading)
+//                    movieListViewModel.obtainEvent(MovieListEvent.ShowMovieList)
+//            }
 
 
 //        viewLifecycleOwner.lifecycleScope.launch {
@@ -114,7 +130,8 @@ class MovieListFragment : Fragment() {
 //                }
 //            }
 //        }
-    }
+        }
+
 
     private fun showWaitDialog() {
         if (!this::waitDialog.isInitialized) {

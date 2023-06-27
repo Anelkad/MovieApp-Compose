@@ -14,5 +14,4 @@ sealed class MovieListEvent {
         var movie: Movie,
         var context: Context
     ) : MovieListEvent()
-    object ShowMovieList : MovieListEvent()
 }

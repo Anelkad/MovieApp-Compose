@@ -44,9 +44,9 @@ class MovieDetailsFragment : Fragment() {
                         if (it is Resource.Success) {
                             setContent {
                             MovieDetailsWithToolbar(
-                                movie = movieDetailsResource.getSuccessResult(),
+                                movie = movieDetailsResource.result,
                                 onBackClick = { findNavController().popBackStack() },
-                                videos = it.getSuccessResult()
+                                videos = it.result
                                 )
                             }
                         }
@@ -74,7 +74,7 @@ class MovieDetailsFragment : Fragment() {
                     is Resource.Success ->{
                         hideWaitDialog()
                         Toast.makeText(
-                            context, "Movie \"${it.getSuccessResult().title}\" saved!",
+                            context, "Movie \"${it.result.title}\" saved!",
                             Toast.LENGTH_LONG
                         ).show()
                     }

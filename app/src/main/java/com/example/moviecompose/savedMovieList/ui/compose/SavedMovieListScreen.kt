@@ -23,7 +23,7 @@ fun SavedMovieListScreen(
 ){
     when (result){
         is Resource.Success -> {
-            val movies = result.getSuccessResult()
+            val movies = result.result
             LazyColumn(
                 modifier = Modifier.padding(5.dp)
             ){

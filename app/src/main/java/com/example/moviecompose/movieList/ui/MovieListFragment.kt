@@ -6,16 +6,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalContext
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -24,8 +23,6 @@ import com.example.moviecompose.adapters.PagedMovieAdapter
 import com.example.moviecompose.movieList.ui.compose.MovieListScreen
 import com.example.moviecompose.movieList.ui.compose.ProgressBar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -36,18 +33,17 @@ class MovieListFragment : Fragment() {
     private val movieAdapter: PagedMovieAdapter by lazy {
         PagedMovieAdapter(
             onMovieClickListener = {
-                movieListViewModel.obtainEvent(
-                    MovieListEvent.OpenMovieDetails(
+                movieListViewModel.setEvent(
+                    MovieListEvent.OnMovieClick(
                         it,
                         findNavController()
                     ),
                 )
             },
             saveMovieListener = {
-                movieListViewModel.obtainEvent(
-                    MovieListEvent.SaveMovie(
-                        it,
-                        requireContext()
+                movieListViewModel.setEvent(
+                    MovieListEvent.OnSaveMovieClick(
+                        it
                     )
                 )
             }
@@ -66,7 +62,7 @@ class MovieListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
         setContent {
-            val uiState by movieListViewModel.movieListUiState.collectAsState()
+            val uiState by movieListViewModel.uiState.collectAsState()
 
             val coroutineScope = rememberCoroutineScope()
             when (val state = uiState) {
@@ -88,6 +84,23 @@ class MovieListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            movieListViewModel.effect.collect {
+                when (it) {
+                    is MovieListEffect.ShowToast -> {
+                        hideWaitDialog()
+                        Toast.makeText(
+                            context, it.text,
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    MovieListEffect.ShowWaitDialog -> {
+                        showWaitDialog()
+                    }
+                }
+            }
+        }
 
 //        lifecycleScope.launch {
 //            movieListViewModel.movieListUiState.collectLatest { state ->
@@ -130,7 +143,7 @@ class MovieListFragment : Fragment() {
 //                }
 //            }
 //        }
-        }
+    }
 
 
     private fun showWaitDialog() {
@@ -145,6 +158,6 @@ class MovieListFragment : Fragment() {
     }
 
     private fun hideWaitDialog() {
-        if (this::waitDialog.isInitialized or waitDialog.isShowing) waitDialog.dismiss()
+        if (this::waitDialog.isInitialized and waitDialog.isShowing) waitDialog.dismiss()
     }
 }

@@ -5,13 +5,13 @@ import androidx.navigation.NavController
 import com.example.moviecompose.models.Movie
 
 sealed class MovieListEvent {
-    data class OpenMovieDetails(
+    object Initial: MovieListEvent()
+    data class OnMovieClick(
         var movieId: Int,
         var navController: NavController
     ) : MovieListEvent()
 
-    data class SaveMovie(
-        var movie: Movie,
-        var context: Context
+    data class OnSaveMovieClick(
+        var movie: Movie
     ) : MovieListEvent()
 }

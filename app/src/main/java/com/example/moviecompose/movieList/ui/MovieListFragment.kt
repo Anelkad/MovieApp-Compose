@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.moviecompose.R
 import com.example.moviecompose.adapters.PagedMovieAdapter
 import com.example.moviecompose.movieList.ui.compose.MovieListScreen
-import com.example.moviecompose.movieList.ui.compose.ProgressBar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -33,15 +32,14 @@ class MovieListFragment : Fragment() {
     private val movieAdapter: PagedMovieAdapter by lazy {
         PagedMovieAdapter(
             onMovieClickListener = {
-                movieListViewModel.setEvent(
+                movieListViewModel.onEvent(
                     MovieListEvent.OnMovieClick(
-                        it,
-                        findNavController()
+                        it
                     ),
                 )
             },
             saveMovieListener = {
-                movieListViewModel.setEvent(
+                movieListViewModel.onEvent(
                     MovieListEvent.OnSaveMovieClick(
                         it
                     )
@@ -66,20 +64,13 @@ class MovieListFragment : Fragment() {
             val uiState by movieListViewModel.uiState.collectAsState()
 
             val coroutineScope = rememberCoroutineScope()
-            when (val state = uiState) {
-                MovieListUIState.Loading -> {
-                    ProgressBar()
+            LaunchedEffect(key1 = Unit) {
+                coroutineScope.launch {
+                    movieAdapter.submitData(uiState.pagingData)
                 }
-                is MovieListUIState.Data -> {
-                    LaunchedEffect(key1 = Unit) {
-                        coroutineScope.launch {
-                            movieAdapter.submitData(state.pagingData)
-                        }
-                    }
-                    MovieListScreen(recyclerView = recyclerView)
-                }
-                is MovieListUIState.Error -> TODO()
             }
+            MovieListScreen(recyclerView = recyclerView)
+            //todo MovieListScreen передать LoadState adapter
         }
     }
 
@@ -99,6 +90,9 @@ class MovieListFragment : Fragment() {
                     MovieListEffect.ShowWaitDialog -> {
                         showWaitDialog()
                     }
+                    is MovieListEffect.NavigateToMovieDetails -> {
+                        navigateToMovieDetails(it.movieId)
+                    }
                 }
             }
         }
@@ -114,38 +108,16 @@ class MovieListFragment : Fragment() {
 //            }
 //        }
 
-//            movieAdapter.addLoadStateListener{ loadState ->
-//            if (loadState.refresh !is LoadState.Loading)
-//                    movieListViewModel.obtainEvent(MovieListEvent.ShowMovieList)
-//            }
-
-
-//        viewLifecycleOwner.lifecycleScope.launch {
-//            movieListViewModel.saveMovieState.collectLatest {
-//                when (it){
-//                    is Resource.Failure -> {
-//                        hideWaitDialog()
-//                        Toast.makeText(
-//                            context, "Cannot save movie!",
-//                            Toast.LENGTH_LONG
-//                        ).show()
-//                    }
-//                    is Resource.Loading -> {
-//                        showWaitDialog()
-//                    }
-//                    is Resource.Success ->{
-//                        hideWaitDialog()
-//                        Toast.makeText(
-//                            context, "Movie \"${it.getSuccessResult().title}\" saved!",
-//                            Toast.LENGTH_LONG
-//                        ).show()
-//                    }
-//                    else -> Unit
-//                }
-//            }
-//        }
     }
 
+    private fun navigateToMovieDetails(movieId: Int){
+            findNavController().navigate(
+                R.id.action_movieListFragment_to_movieDetailsFragment,
+                Bundle().apply {
+                    putInt("id", movieId)
+                }
+            )
+    }
 
     private fun showWaitDialog() {
         if (!this::waitDialog.isInitialized) {

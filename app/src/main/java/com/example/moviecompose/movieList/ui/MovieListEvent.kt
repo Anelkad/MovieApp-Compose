@@ -1,16 +1,13 @@
 package com.example.moviecompose.movieList.ui
 
-import androidx.navigation.NavController
 import com.example.moviecompose.models.Movie
 
-sealed class MovieListEvent {
-    object Initial: MovieListEvent()
+sealed interface MovieListEvent {
     data class OnMovieClick(
-        var movieId: Int,
-        var navController: NavController
-    ) : MovieListEvent()
+        var movieId: Int
+    ) : MovieListEvent
 
     data class OnSaveMovieClick(
         var movie: Movie
-    ) : MovieListEvent()
+    ) : MovieListEvent
 }

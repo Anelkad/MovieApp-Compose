@@ -10,17 +10,20 @@ import android.widget.Toast
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.moviecompose.R
 import com.example.moviecompose.adapters.PagedMovieAdapter
 import com.example.moviecompose.movieList.ui.compose.MovieListScreen
+import com.example.moviecompose.movieList.ui.compose.ProgressBar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -61,7 +64,7 @@ class MovieListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
         setContent {
-            val uiState by movieListViewModel.uiState.collectAsState()
+            val uiState by remember {movieListViewModel.uiState}
 
             val coroutineScope = rememberCoroutineScope()
             LaunchedEffect(key1 = Unit) {
@@ -69,6 +72,7 @@ class MovieListFragment : Fragment() {
                     movieAdapter.submitData(uiState.pagingData)
                 }
             }
+            if (uiState.isLoading) ProgressBar()
             MovieListScreen(recyclerView = recyclerView)
             //todo MovieListScreen передать LoadState adapter
         }
@@ -96,6 +100,12 @@ class MovieListFragment : Fragment() {
                 }
             }
         }
+
+        movieAdapter.addLoadStateListener{ loadState ->
+            if (loadState.refresh is LoadState.NotLoading)
+                    movieListViewModel.onEvent(MovieListEvent.NotLoading)
+            }
+
 
 //        lifecycleScope.launch {
 //            movieListViewModel.movieListUiState.collectLatest { state ->

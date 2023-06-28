@@ -1,5 +1,9 @@
 package com.example.moviecompose.movieList.ui
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -26,11 +30,14 @@ class MovieListViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val initialState: MovieListUIState by lazy {
-        MovieListUIState(pagingData = PagingData.empty())
+        MovieListUIState(
+            pagingData = PagingData.empty(),
+            isLoading = true
+        )
     }
 
-    private val _uiState: MutableStateFlow<MovieListUIState> = MutableStateFlow(initialState)
-    val uiState = _uiState.asStateFlow()
+    private val _uiState: MutableState<MovieListUIState> = mutableStateOf(initialState)
+    val uiState: State<MovieListUIState> = _uiState
 
     private val _event: MutableSharedFlow<MovieListEvent> = MutableSharedFlow()
     //val event = _event.asSharedFlow()
@@ -47,6 +54,8 @@ class MovieListViewModel @Inject constructor(
     }
      fun onEvent(event: MovieListEvent) {
         when (event) {
+            MovieListEvent.NotLoading ->
+                setState(_uiState.value.copy(isLoading = false))
             is MovieListEvent.OnMovieClick ->
                 setEffect (MovieListEffect.NavigateToMovieDetails(event.movieId) )
             is MovieListEvent.OnSaveMovieClick -> {
@@ -63,7 +72,10 @@ class MovieListViewModel @Inject constructor(
                 movieListRepository.getPagedMovieList()
                     .cachedIn(viewModelScope)
                     .collectLatest { pagingData ->
-                        setState (MovieListUIState(pagingData = pagingData))
+                        setState(_uiState.value.copy(
+                            pagingData = pagingData
+                            )
+                        )
                     }
             } catch (e: Exception) {
                 setEffect (MovieListEffect.ShowToast("Something went wrong. Reason: ${e.message ?: e.localizedMessage}"))

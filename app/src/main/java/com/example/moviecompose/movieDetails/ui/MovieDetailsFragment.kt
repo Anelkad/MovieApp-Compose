@@ -7,15 +7,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.moviecompose.R
+import com.example.moviecompose.models.MovieDetails
 import com.example.moviecompose.movieDetails.ui.compose.MovieDetailsWithToolbar
 import com.example.moviecompose.movieDetails.ui.compose.ProgressBar
+import com.example.moviecompose.movieList.ui.MovieListEffect
 import com.example.moviecompose.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -26,65 +29,57 @@ class MovieDetailsFragment : Fragment() {
 
     val args: MovieDetailsFragmentArgs by navArgs()
     val movieViewModel: MovieDetailsViewModel by viewModels()
+
+    private lateinit var waitDialog: Dialog
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
-        //todo viewState (loading progress bar)
+
         movieViewModel.getMovieDetails(args.id)
-        //todo observer внутри observer
-        //todo combine state??
-        movieViewModel.movieDetailsDetailsState.observe(viewLifecycleOwner, Observer { movieDetailsResource ->
-            if (movieDetailsResource is Resource.Loading)
-                setContent {
-                    ProgressBar()
+
+        setContent {
+            val uiState by remember {movieViewModel.uiState}
+
+            when (uiState){
+                MovieDetailsUIState.Loading -> ProgressBar()
+                is MovieDetailsUIState.Data -> {
+                    MovieDetailsWithToolbar(
+                        movie = (uiState as MovieDetailsUIState.Data).movie,
+                        onBackClick = {
+                            movieViewModel.onEvent(MovieDetailsEvent.OnBackClick)
+                        },
+                        videos = (uiState as MovieDetailsUIState.Data).videos
+                    )
                 }
-            if (movieDetailsResource is Resource.Success) {
-                    movieViewModel.movieVideoState.observe(viewLifecycleOwner, Observer {
-                        if (it is Resource.Success) {
-                            setContent {
-                            MovieDetailsWithToolbar(
-                                movie = movieDetailsResource.result,
-                                onBackClick = { findNavController().popBackStack() },
-                                videos = it.result
-                                )
-                            }
-                        }
-                    })
             }
-        })
+        }
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewLifecycleOwner.lifecycleScope.launch {
-            movieViewModel.saveMovieState.collectLatest {
-                when (it){
-                    is Resource.Failure -> {
+            movieViewModel.effect.collect {
+                when (it) {
+                    is MovieDetailsEffect.ShowToast -> {
                         hideWaitDialog()
                         Toast.makeText(
-                            context, "Cannot save movie!",
+                            context, it.text,
                             Toast.LENGTH_LONG
                         ).show()
                     }
-                    is Resource.Loading -> {
+                    MovieDetailsEffect.ShowWaitDialog -> {
                         showWaitDialog()
                     }
-                    is Resource.Success ->{
-                        hideWaitDialog()
-                        Toast.makeText(
-                            context, "Movie \"${it.result.title}\" saved!",
-                            Toast.LENGTH_LONG
-                        ).show()
+                    is MovieDetailsEffect.NavigateBack -> {
+                        findNavController().popBackStack()
                     }
-                    else -> Unit
                 }
             }
         }
     }
-
-    private lateinit var waitDialog: Dialog
     private fun showWaitDialog(){
         if (!this::waitDialog.isInitialized) {
             waitDialog = Dialog(requireActivity())
@@ -97,6 +92,6 @@ class MovieDetailsFragment : Fragment() {
     }
 
     private fun hideWaitDialog(){
-        if (this::waitDialog.isInitialized or waitDialog.isShowing) waitDialog.dismiss()
+        if (this::waitDialog.isInitialized and waitDialog.isShowing) waitDialog.dismiss()
     }
 }

@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -103,7 +102,7 @@ class MovieListFragment : Fragment() {
 
         movieAdapter.addLoadStateListener{ loadState ->
             if (loadState.refresh is LoadState.NotLoading)
-                    movieListViewModel.onEvent(MovieListEvent.NotLoading)
+                    movieListViewModel.onEvent(MovieListEvent.StopLoading)
             }
 
 

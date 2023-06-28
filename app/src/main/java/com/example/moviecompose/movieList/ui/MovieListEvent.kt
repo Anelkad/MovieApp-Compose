@@ -3,7 +3,7 @@ package com.example.moviecompose.movieList.ui
 import com.example.moviecompose.models.Movie
 
 sealed interface MovieListEvent {
-    object NotLoading: MovieListEvent
+    object StopLoading: MovieListEvent
     data class OnMovieClick(
         var movieId: Int
     ) : MovieListEvent

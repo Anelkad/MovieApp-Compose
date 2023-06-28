@@ -2,7 +2,6 @@ package com.example.moviecompose.movieList.ui
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,9 +14,6 @@ import com.example.moviecompose.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -54,7 +50,7 @@ class MovieListViewModel @Inject constructor(
     }
      fun onEvent(event: MovieListEvent) {
         when (event) {
-            MovieListEvent.NotLoading ->
+            MovieListEvent.StopLoading ->
                 setState(_uiState.value.copy(isLoading = false))
             is MovieListEvent.OnMovieClick ->
                 setEffect (MovieListEffect.NavigateToMovieDetails(event.movieId) )

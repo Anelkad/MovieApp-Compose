@@ -53,7 +53,7 @@ class SavedMovieListFragment : Fragment() {
     ): View = ComposeView(requireContext()).apply {
         setContent {
                 val uiState by savedMovieListViewModel.uiState.collectAsState()
-
+                //todo ui не обновляется при удалении со списка
                 if (uiState.isLoading) ProgressBar()
                 else{
                     val coroutineScope = rememberCoroutineScope()

@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.ComposeView
@@ -39,7 +40,7 @@ class MovieDetailsFragment : Fragment() {
     ): View = ComposeView(requireContext()).apply {
         Log.d("qwerty", "oCreateView MovieDetails")
         setContent {
-            val movieDetailsUIState by remember {movieViewModel.uiState}
+            val movieDetailsUIState by movieViewModel.uiState.collectAsState()
 
             when (val state = movieDetailsUIState){
                 MovieDetailsUIState.Loading -> ProgressBar()

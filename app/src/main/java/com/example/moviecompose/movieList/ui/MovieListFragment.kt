@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -59,7 +60,7 @@ class MovieListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
         setContent {
-            val uiState by remember {movieListViewModel.uiState}
+            val uiState by movieListViewModel.uiState.collectAsState()
 
             val coroutineScope = rememberCoroutineScope()
             LaunchedEffect(key1 = Unit) {

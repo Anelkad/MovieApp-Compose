@@ -14,6 +14,8 @@ import com.example.moviecompose.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -32,8 +34,8 @@ class MovieListViewModel @Inject constructor(
         )
     }
 
-    private val _uiState: MutableState<MovieListUIState> = mutableStateOf(initialState)
-    val uiState: State<MovieListUIState> = _uiState
+    private val _uiState: MutableStateFlow<MovieListUIState> = MutableStateFlow(initialState)
+    val uiState = _uiState.asStateFlow()
 
     private val _event: MutableSharedFlow<MovieListEvent> = MutableSharedFlow()
     //val event = _event.asSharedFlow()

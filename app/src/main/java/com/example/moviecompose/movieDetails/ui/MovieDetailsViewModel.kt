@@ -12,6 +12,8 @@ import com.example.moviecompose.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,8 +28,8 @@ class MovieDetailsViewModel @Inject constructor(
         MovieDetailsUIState.Loading
     }
 
-    private val _uiState: MutableState<MovieDetailsUIState> = mutableStateOf(initialState)
-    val uiState: State<MovieDetailsUIState> = _uiState
+    private val _uiState: MutableStateFlow<MovieDetailsUIState> = MutableStateFlow(initialState)
+    val uiState = _uiState.asStateFlow()
 
     private val _event: MutableSharedFlow<MovieDetailsEvent> = MutableSharedFlow()
     //val event = _event.asSharedFlow()

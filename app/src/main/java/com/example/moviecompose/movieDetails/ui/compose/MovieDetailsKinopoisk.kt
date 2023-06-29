@@ -12,6 +12,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -412,9 +414,10 @@ fun HorizontalRowOfRating(){
 
 @Composable
 fun VideoContent(video: Video){
-    val url = "https://www.youtube.com/watch?v=${video.key}"
-    AndroidView(factory = {
-        WebView(it).apply {
+    val webViewState = remember { mutableStateOf("https://www.youtube.com/watch?v=${video.key}")}
+    AndroidView(
+        factory = {context ->
+        WebView(context).apply {
             layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 500
@@ -422,35 +425,38 @@ fun VideoContent(video: Video){
             webViewClient = WebViewClient()
             settings.javaScriptEnabled = true
             webChromeClient = WebChromeClient()
+            loadUrl(webViewState.value)
         }
-    }, update = {
-        it.loadUrl(url)
-    })
+    }
+    )
 }
 
 @Composable
-fun VideoItem(video: Video){
+fun VideoItem(_video: Video){
+    val video = remember { mutableStateOf(_video)}
     Column(
         modifier = Modifier
             .padding(start = 20.dp)
             .width(250.dp)
     ){
-        VideoContent(video)
+        VideoContent(video.value)
+        //todo bottom nav не работает с webview на эмуляторе
         Text(
-            text = video.name,
+            text = video.value.name,
             fontWeight = FontWeight.Medium,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
         Text(
-            text = video.published_at.take(10),
+            text = video.value.published_at.take(10),
             color = Color.Gray
         )
     }
 }
 
 @Composable
-fun VideoBlock(videoResponse: MovieVideoResponse){
+fun VideoBlock(_videoResponse: MovieVideoResponse){
+    val videoResponse = remember { mutableStateOf(_videoResponse) }
     Column(
         modifier = Modifier
             .padding(top = 20.dp)
@@ -468,7 +474,7 @@ fun VideoBlock(videoResponse: MovieVideoResponse){
             )
             Row{
                 Text(
-                    text = videoResponse.results.size.toString(),
+                    text = videoResponse.value.results.size.toString(),
                     color = colorResource(R.color.orange),
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp
@@ -491,7 +497,7 @@ fun VideoBlock(videoResponse: MovieVideoResponse){
                 .padding(vertical = 10.dp)
                 .horizontalScroll(rememberScrollState())
         ){
-            videoResponse.results.forEach{
+            videoResponse.value.results.forEach{
                 video ->
                 VideoItem(video)
             }

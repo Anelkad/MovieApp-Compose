@@ -43,6 +43,7 @@ class MovieDetailsViewModel @Inject constructor(
     }
     fun onEvent(event: MovieDetailsEvent) {
         when (event) {
+            is MovieDetailsEvent.LoadMovieDetails -> getMovieDetails(event.movieId)
             is MovieDetailsEvent.OnBackClick ->
                 setEffect (MovieDetailsEffect.NavigateBack)
             is MovieDetailsEvent.OnSaveMovieClick -> {
@@ -50,7 +51,7 @@ class MovieDetailsViewModel @Inject constructor(
             }
         }
     }
-    fun getMovieDetails(movieId: Int) {
+    private fun getMovieDetails(movieId: Int) {
         viewModelScope.launch {
             try {
                 val movieDetails = movieDetailsRepository.getMovieDetails(movieId)

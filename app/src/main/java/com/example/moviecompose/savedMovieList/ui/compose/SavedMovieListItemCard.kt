@@ -85,6 +85,6 @@ fun SavedMovieListItemCard(
 @Composable
 fun SavedMovieListItemPreview() {
     MovieComposeTheme {
-        SavedMovieListScreen()
+        //SavedMovieListScreen()
     }
 }

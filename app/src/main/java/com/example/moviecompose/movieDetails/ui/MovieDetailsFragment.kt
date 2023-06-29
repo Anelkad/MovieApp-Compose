@@ -2,6 +2,7 @@ package com.example.moviecompose.movieDetails.ui
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,13 +16,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.moviecompose.R
-import com.example.moviecompose.models.MovieDetails
 import com.example.moviecompose.movieDetails.ui.compose.MovieDetailsWithToolbar
 import com.example.moviecompose.movieDetails.ui.compose.ProgressBar
-import com.example.moviecompose.movieList.ui.MovieListEffect
-import com.example.moviecompose.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -31,25 +28,28 @@ class MovieDetailsFragment : Fragment() {
     val movieViewModel: MovieDetailsViewModel by viewModels()
 
     private lateinit var waitDialog: Dialog
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        movieViewModel.onEvent(MovieDetailsEvent.LoadMovieDetails(args.id))
+        super.onCreate(savedInstanceState)
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
-
-        movieViewModel.getMovieDetails(args.id)
-
+        Log.d("qwerty", "oCreateView MovieDetails")
         setContent {
-            val uiState by remember {movieViewModel.uiState}
+            val movieDetailsUIState by remember {movieViewModel.uiState}
 
-            when (uiState){
+            when (val state = movieDetailsUIState){
                 MovieDetailsUIState.Loading -> ProgressBar()
                 is MovieDetailsUIState.Data -> {
                     MovieDetailsWithToolbar(
-                        movie = (uiState as MovieDetailsUIState.Data).movie,
+                        movie = state.movie,
                         onBackClick = {
                             movieViewModel.onEvent(MovieDetailsEvent.OnBackClick)
                         },
-                        videos = (uiState as MovieDetailsUIState.Data).videos
+                        videos = state.videos
                     )
                 }
             }

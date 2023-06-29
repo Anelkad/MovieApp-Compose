@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/savedMovieFragment"
-        android:name="com.example.moviecompose.savedMovieList.ui.SavedMovieFragment"
+        android:name="com.example.moviecompose.savedMovieList.ui.SavedMovieListFragment"
         android:label="fragment_saved_movie">
         <action
             android:id="@+id/action_savedMovieFragment_to_movieDetailsFragment"

@@ -17,36 +17,18 @@ import com.example.moviecompose.utils.Resource
 
 @Composable
 fun SavedMovieListScreen(
-    result: Resource<ArrayList<Movie>> = Resource.Loading,
+    movieList: ArrayList<Movie>,
     movieOnClick: (Int) -> Unit = {},
     movieOnDeleteClick: (Int) -> Unit = {}
 ){
-    when (result){
-        is Resource.Success -> {
-            val movies = result.result
-            LazyColumn(
-                modifier = Modifier.padding(5.dp)
-            ){
-                items(items = movies){ movie->
-                    SavedMovieListItemCard(
-                        movie = movie,
-                        movieOnClick = movieOnClick,
-                        movieOnDeleteClick = movieOnDeleteClick
-                    )
-                }
-            }
-        }
-        is Resource.Loading -> {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ){
-                CircularProgressIndicator()
-            }
-        }
-        is Resource.Failure -> {
-            Text(
-                text = "Failure to load saved movies"
+    LazyColumn(
+        modifier = Modifier.padding(5.dp)
+    ){
+        items(items = movieList){ movie->
+            SavedMovieListItemCard(
+                movie = movie,
+                movieOnClick = movieOnClick,
+                movieOnDeleteClick = movieOnDeleteClick
             )
         }
     }

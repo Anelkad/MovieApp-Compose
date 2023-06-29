@@ -35,16 +35,12 @@ class MovieListFragment : Fragment() {
         PagedMovieAdapter(
             onMovieClickListener = {
                 movieListViewModel.onEvent(
-                    MovieListEvent.OnMovieClick(
-                        it
-                    ),
+                    MovieListEvent.OnMovieClick(it),
                 )
             },
             saveMovieListener = {
                 movieListViewModel.onEvent(
-                    MovieListEvent.OnSaveMovieClick(
-                        it
-                    )
+                    MovieListEvent.OnSaveMovieClick(it)
                 )
             }
         )

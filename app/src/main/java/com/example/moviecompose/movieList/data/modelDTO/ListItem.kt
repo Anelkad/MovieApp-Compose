@@ -1,4 +1,6 @@
-package com.example.moviecompose.models
+package com.example.moviecompose.movieList.data.modelDTO
+
+import com.example.moviecompose.movieList.domain.model.Movie
 
 sealed class ListItem {
 

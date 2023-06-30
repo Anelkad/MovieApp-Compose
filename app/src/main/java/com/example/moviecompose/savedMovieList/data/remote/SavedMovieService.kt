@@ -1,7 +1,7 @@
 package com.example.moviecompose.savedMovieList.data.remote
 
 import MOVIES
-import com.example.moviecompose.models.Movie
+import com.example.moviecompose.movieList.domain.model.Movie
 import com.example.moviecompose.utils.Resource
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError

@@ -1,5 +1,4 @@
 package com.example.moviecompose.savedMovieList.ui
-import com.example.moviecompose.models.Movie
 
 
 sealed interface SavedMovieListEffect {

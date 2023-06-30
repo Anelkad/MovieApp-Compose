@@ -1,6 +1,6 @@
 package com.example.moviecompose.savedMovieList.data.repository
 
-import com.example.moviecompose.models.Movie
+import com.example.moviecompose.movieList.domain.model.Movie
 import com.example.moviecompose.savedMovieList.data.remote.SavedMovieDataSource
 import com.example.moviecompose.savedMovieList.domain.repository.SavedMovieRepository
 import javax.inject.Inject

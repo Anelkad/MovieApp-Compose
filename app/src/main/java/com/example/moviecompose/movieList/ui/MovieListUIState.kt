@@ -1,7 +1,7 @@
 package com.example.moviecompose.movieList.ui
 
 import androidx.paging.PagingData
-import com.example.moviecompose.models.ListItem
+import com.example.moviecompose.movieList.data.modelDTO.ListItem
 
 data class MovieListUIState(
     val pagingData: PagingData<ListItem>,

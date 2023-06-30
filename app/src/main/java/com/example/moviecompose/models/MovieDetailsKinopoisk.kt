@@ -1,5 +1,8 @@
 package com.example.moviecompose.models
 
+import com.example.moviecompose.movieDetails.data.modelDTO.Genre
+import com.example.moviecompose.movieDetails.data.modelDTO.ProductionCountry
+
 data class MovieDetailsKinopoisk(
     val adult: Boolean,
     val backdrop_path: String,

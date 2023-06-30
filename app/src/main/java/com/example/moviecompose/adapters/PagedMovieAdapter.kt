@@ -5,9 +5,9 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.moviecompose.models.Ad
-import com.example.moviecompose.models.ListItem
-import com.example.moviecompose.models.Movie
+import com.example.moviecompose.movieList.data.modelDTO.Ad
+import com.example.moviecompose.movieList.data.modelDTO.ListItem
+import com.example.moviecompose.movieList.domain.model.Movie
 import com.example.moviecompose.movieList.ui.compose.AdListItemCard
 import com.example.moviecompose.movieList.ui.compose.MovieListItemCard
 

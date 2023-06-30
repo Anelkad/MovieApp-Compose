@@ -1,6 +1,6 @@
 package com.example.moviecompose.savedMovieList.domain.repository
 
-import com.example.moviecompose.models.Movie
+import com.example.moviecompose.movieList.domain.model.Movie
 import com.example.moviecompose.utils.Resource
 import kotlinx.coroutines.flow.Flow
 

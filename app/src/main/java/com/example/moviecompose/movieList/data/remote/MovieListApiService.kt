@@ -2,7 +2,7 @@ package com.example.moviecompose.movieList.data.remote
 
 import API_KEY
 import LANGUAGE
-import com.example.moviecompose.models.MovieListResponse
+import com.example.moviecompose.movieList.data.modelDTO.MovieListResponseDTO
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -17,5 +17,5 @@ interface MovieListApiService {
         with_genres: String = "16,18",
         @Query("language")
         language: String = LANGUAGE
-    ): MovieListResponse
+    ): MovieListResponseDTO
 }

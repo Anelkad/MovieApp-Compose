@@ -1,5 +1,6 @@
-package com.example.moviecompose.models
+package com.example.moviecompose.movieDetails.data.modelDTO
 
+import com.example.moviecompose.movieList.domain.model.Movie
 import com.google.gson.annotations.SerializedName
 
 //todo DTO

@@ -1,4 +1,4 @@
-package com.example.moviecompose.models
+package com.example.moviecompose.movieDetails.data.modelDTO
 
 data class MovieVideoResponse(
     val id: Int,

@@ -2,7 +2,7 @@ package com.example.moviecompose.movieList.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.example.moviecompose.models.ListItem
+import com.example.moviecompose.movieList.data.modelDTO.ListItem
 import com.example.moviecompose.movieList.data.remote.MovieListDataSource
 import com.example.moviecompose.movieList.domain.repository.MovieListRepository
 import kotlinx.coroutines.flow.Flow

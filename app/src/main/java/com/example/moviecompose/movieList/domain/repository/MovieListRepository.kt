@@ -1,9 +1,7 @@
 package com.example.moviecompose.movieList.domain.repository
 
 import androidx.paging.PagingData
-import com.example.moviecompose.models.ListItem
-import com.example.moviecompose.models.MovieDetails
-import com.example.moviecompose.models.MovieListResponse
+import com.example.moviecompose.movieList.data.modelDTO.ListItem
 import kotlinx.coroutines.flow.Flow
 
 interface MovieListRepository {

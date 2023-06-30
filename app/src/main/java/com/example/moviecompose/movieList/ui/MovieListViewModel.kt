@@ -1,13 +1,10 @@
 package com.example.moviecompose.movieList.ui
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.moviecompose.models.Movie
+import com.example.moviecompose.movieList.domain.model.Movie
 import com.example.moviecompose.movieList.domain.repository.MovieListRepository
 import com.example.moviecompose.savedMovieList.domain.repository.SavedMovieRepository
 import com.example.moviecompose.utils.Resource

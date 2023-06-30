@@ -1,6 +1,6 @@
 package com.example.moviecompose.movieList.ui
 
-import com.example.moviecompose.models.Movie
+import com.example.moviecompose.movieList.domain.model.Movie
 
 sealed interface MovieListEvent {
     object StopLoading: MovieListEvent

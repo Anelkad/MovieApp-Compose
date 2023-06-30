@@ -1,7 +1,7 @@
 package com.example.moviecompose.movieDetails.data.remote
 
-import com.example.moviecompose.models.MovieDetails
-import com.example.moviecompose.models.MovieVideoResponse
+import com.example.moviecompose.movieDetails.data.modelDTO.MovieDetails
+import com.example.moviecompose.movieDetails.data.modelDTO.MovieVideoResponse
 import javax.inject.Inject
 
 class MovieDetailsDataSource @Inject constructor(

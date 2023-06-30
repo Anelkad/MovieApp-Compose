@@ -28,7 +28,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.moviecompose.R
-import com.example.moviecompose.models.*
+import com.example.moviecompose.movieDetails.data.modelDTO.Genre
+import com.example.moviecompose.movieDetails.data.modelDTO.MovieDetails
+import com.example.moviecompose.movieDetails.data.modelDTO.MovieVideoResponse
+import com.example.moviecompose.movieDetails.data.modelDTO.ProductionCountry
+import com.example.moviecompose.movieDetails.data.modelDTO.Video
 import com.example.moviecompose.ui.theme.MovieComposeTheme
 
 

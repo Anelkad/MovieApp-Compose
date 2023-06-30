@@ -1,4 +1,4 @@
-package com.example.moviecompose.models
+package com.example.moviecompose.movieList.data.modelDTO
 
 data class Ad(
     val title: String,

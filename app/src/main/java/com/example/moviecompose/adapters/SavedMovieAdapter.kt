@@ -5,7 +5,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.moviecompose.models.Movie
+import com.example.moviecompose.movieList.domain.model.Movie
 import com.example.moviecompose.savedMovieList.ui.compose.SavedMovieListItemCard
 
 class SavedMovieAdapter(

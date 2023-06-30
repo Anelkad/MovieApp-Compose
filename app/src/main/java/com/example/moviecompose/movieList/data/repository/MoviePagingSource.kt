@@ -2,8 +2,8 @@ package com.example.moviecompose.movieList.data.repository
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.moviecompose.models.Ad
-import com.example.moviecompose.models.ListItem
+import com.example.moviecompose.movieList.data.modelDTO.Ad
+import com.example.moviecompose.movieList.data.modelDTO.ListItem
 import com.example.moviecompose.movieList.data.remote.MovieListDataSource
 
 class MoviePagingSource(
@@ -22,7 +22,7 @@ class MoviePagingSource(
             )
 
             val list = buildList{
-                addAll(movieListResponse.results.map {ListItem.MovieItem(it)} )
+                addAll(movieListResponse.results.map { ListItem.MovieItem(it.toDomain())} )
                 //каждые 10 фильмов - реклама
                 add(10, ListItem.AdItem(ad))
                 add(21, ListItem.AdItem(ad))

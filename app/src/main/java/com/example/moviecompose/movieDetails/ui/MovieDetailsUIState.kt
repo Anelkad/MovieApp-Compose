@@ -1,7 +1,7 @@
 package com.example.moviecompose.movieDetails.ui
 
-import com.example.moviecompose.models.MovieDetails
-import com.example.moviecompose.models.MovieVideoResponse
+import com.example.moviecompose.movieDetails.data.modelDTO.MovieDetails
+import com.example.moviecompose.movieDetails.data.modelDTO.MovieVideoResponse
 
 sealed interface MovieDetailsUIState{
     object Loading: MovieDetailsUIState

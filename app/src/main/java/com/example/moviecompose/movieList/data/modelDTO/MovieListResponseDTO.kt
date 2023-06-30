@@ -1,10 +1,10 @@
-package com.example.moviecompose.models
+package com.example.moviecompose.movieList.data.modelDTO
 
 import com.google.gson.annotations.SerializedName
 
-data class MovieListResponse(
+data class MovieListResponseDTO(
     val page: Int,
-    val results: ArrayList<Movie>,
+    val results: ArrayList<MovieDTO>,
     @SerializedName("total_pages")
     val totalPages: Int
 )

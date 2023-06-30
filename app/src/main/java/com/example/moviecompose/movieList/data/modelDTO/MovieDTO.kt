@@ -1,8 +1,9 @@
-package com.example.moviecompose.models
+package com.example.moviecompose.movieList.data.modelDTO
 
+import com.example.moviecompose.movieList.domain.model.Movie
 import com.google.gson.annotations.SerializedName
 
-data class Movie(
+data class MovieDTO(
     var id: Int = 0,
     var title: String = "",
     var overview: String = "",
@@ -14,4 +15,14 @@ data class Movie(
     var backdropPath: String = "",
     @SerializedName("vote_average")
     var voteAverage: Float = 0F
-)
+){
+    fun toDomain() = Movie(
+        id,
+        title,
+        overview,
+        releaseDate,
+        posterPath,
+        backdropPath,
+        voteAverage
+    )
+}

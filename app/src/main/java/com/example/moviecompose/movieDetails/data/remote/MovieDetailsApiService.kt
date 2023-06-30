@@ -2,8 +2,8 @@ package com.example.moviecompose.movieDetails.data.remote
 
 import API_KEY
 import LANGUAGE
-import com.example.moviecompose.models.MovieDetails
-import com.example.moviecompose.models.MovieVideoResponse
+import com.example.moviecompose.movieDetails.data.modelDTO.MovieDetails
+import com.example.moviecompose.movieDetails.data.modelDTO.MovieVideoResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

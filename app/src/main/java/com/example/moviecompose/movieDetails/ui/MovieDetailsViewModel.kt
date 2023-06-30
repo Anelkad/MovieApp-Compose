@@ -1,13 +1,10 @@
 package com.example.moviecompose.movieDetails.ui
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moviecompose.movieDetails.domain.repository.MovieDetailsRepository
 import com.example.moviecompose.savedMovieList.domain.repository.SavedMovieRepository
-import com.example.moviecompose.models.Movie
+import com.example.moviecompose.movieList.domain.model.Movie
 import com.example.moviecompose.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel

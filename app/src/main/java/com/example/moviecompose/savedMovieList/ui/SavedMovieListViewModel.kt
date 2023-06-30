@@ -35,6 +35,8 @@ class SavedMovieListViewModel @Inject constructor (
     private val _uiState: MutableStateFlow<SavedMovieListUIState> = MutableStateFlow(initialState)
     val uiState = _uiState.asStateFlow()
 
+    private val _movieList: MutableStateFlow<ArrayList<Movie>> = MutableStateFlow(ArrayList())
+
     private val _event: MutableSharedFlow<SavedMovieListEvent> = MutableSharedFlow()
     //val event = _event.asSharedFlow()
 
@@ -42,7 +44,8 @@ class SavedMovieListViewModel @Inject constructor (
     val effect = _effect.receiveAsFlow()
 
     private fun setState(newState: SavedMovieListUIState) {
-        _uiState.value = newState
+        _uiState.tryEmit(newState)
+        //_uiState.update { newState }
     }
     private fun setEffect(effectValue: SavedMovieListEffect) {
         viewModelScope.launch { _effect.send(effectValue) }
@@ -52,6 +55,7 @@ class SavedMovieListViewModel @Inject constructor (
             is SavedMovieListEvent.OnMovieClick ->
                 setEffect (SavedMovieListEffect.NavigateToMovieDetails(event.movieId))
             is SavedMovieListEvent.OnDeleteMovieClick -> {
+                setState(SavedMovieListUIState.Loading)
                 deleteMovie(event.movieId)
             }
         }
@@ -64,10 +68,11 @@ class SavedMovieListViewModel @Inject constructor (
      private fun getMovieList() = viewModelScope.launch {
        savedMovieRepository.getSavedMovieList().collect { resource ->
            if (resource is Resource.Success) {
+               _movieList.value = resource.result
                Log.d("qwerty getMovieList", resource.result.size.toString())
                setState(
                    SavedMovieListUIState.Data(
-                       movieList = resource.result
+                       movieList = _movieList.value
                    )
                )
            }
@@ -75,27 +80,24 @@ class SavedMovieListViewModel @Inject constructor (
     }
 
     private fun deleteMovie(movieId: Int) = viewModelScope.launch {
-        viewModelScope.launch {
-            setState(SavedMovieListUIState.Loading)
             //setEffect (SavedMovieListEffect.ShowWaitDialog)
             val result = savedMovieRepository.deleteMovie(movieId)
-            when (result){
-                is Resource.Loading -> {
-                    setState(SavedMovieListUIState.Loading)
-                }
+            when (result) {
+                is Resource.Loading -> Unit
                 is Resource.Success -> {
 //                    setEffect(
 //                        SavedMovieListEffect.ShowToast("Movie deleted!")
 //                    )
-                    val movieList = (_uiState.value as SavedMovieListUIState.Data).movieList
-                    setState(SavedMovieListUIState.Data(movieList))
-                    Log.d("qwerty in delete", "uiState: ${movieList.size}")
+                    setState(
+                        SavedMovieListUIState.Data(
+                            movieList = _movieList.value
+                        )
+                    )
                 }
                 is Resource.Failure ->
-                    setEffect (
+                    setEffect(
                         SavedMovieListEffect.ShowToast("Cannot delete movie!")
                     )
             }
         }
-    }
 }

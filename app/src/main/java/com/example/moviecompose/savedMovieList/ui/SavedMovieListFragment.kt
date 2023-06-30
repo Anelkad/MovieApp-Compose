@@ -8,11 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.compose.material.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.text.style.TextAlign
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -31,6 +33,23 @@ class SavedMovieListFragment : Fragment() {
     val savedMovieListViewModel: SavedMovieListViewModel by viewModels()
     private lateinit var waitDialog: Dialog
 
+    private val movieAdapter: SavedMovieAdapter by lazy {
+        SavedMovieAdapter(
+            onMovieClickListener = {
+                savedMovieListViewModel.onEvent(SavedMovieListEvent.OnMovieClick(it))
+            },
+            deleteMovieListener = {
+                savedMovieListViewModel.onEvent(SavedMovieListEvent.OnDeleteMovieClick(it))
+            }
+        )
+    }
+    private val recyclerView: RecyclerView by lazy {
+        RecyclerView(requireContext()).apply {
+            adapter = movieAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,19 +58,24 @@ class SavedMovieListFragment : Fragment() {
         setContent {
             val uiState by savedMovieListViewModel.uiState.collectAsState()
             //todo ui не обновляется при удалении со списка
-            //todo java.lang.IndexOutOfBoundsException: Index: 3, Size: 3
+
+            Log.d("qwerty uiState", uiState.toString())
+
             when (val state = uiState){
                 SavedMovieListUIState.Loading -> ProgressBar()
                 is SavedMovieListUIState.Data -> {
-                    SavedMovieListScreen(
-                        movieList = state.movieList,
-                        movieOnClick = {
-                            savedMovieListViewModel.onEvent(SavedMovieListEvent.OnMovieClick(it))
-                        },
-                        movieOnDeleteClick = {
-                            savedMovieListViewModel.onEvent(SavedMovieListEvent.OnDeleteMovieClick(it))
-                        }
-                    )
+
+                    MovieListScreen(recyclerView = recyclerView)
+
+                    if (state.movieList.isEmpty())
+                        Text(
+                            text = "No saved movies",
+                            textAlign = TextAlign.Center
+                        )
+                    movieAdapter.submitList(state.movieList.toMutableList())
+
+                    Log.d("qwerty recycler", movieAdapter.itemCount.toString())
+
                     Log.d("qwerty SavedMovieFragm", "uiState: ${state.movieList.size}")
                 }
             }

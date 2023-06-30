@@ -38,7 +38,6 @@ class MovieDetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
-        Log.d("qwerty", "oCreateView MovieDetails")
         setContent {
             val movieDetailsUIState by movieViewModel.uiState.collectAsState()
 

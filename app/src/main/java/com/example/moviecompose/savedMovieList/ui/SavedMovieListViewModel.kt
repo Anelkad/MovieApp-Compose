@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,7 +29,7 @@ class SavedMovieListViewModel @Inject constructor (
 ) : ViewModel() {
 
     private val initialState: SavedMovieListUIState by lazy {
-        SavedMovieListUIState(isLoading = true, movieList = ArrayList())
+        SavedMovieListUIState.Loading
     }
 
     private val _uiState: MutableStateFlow<SavedMovieListUIState> = MutableStateFlow(initialState)
@@ -60,13 +61,12 @@ class SavedMovieListViewModel @Inject constructor (
         getMovieList()
     }
 
-    private fun getMovieList() = viewModelScope.launch {
-       savedMovieRepository.getSavedMovieList().collect{ resource ->
+     private fun getMovieList() = viewModelScope.launch {
+       savedMovieRepository.getSavedMovieList().collect { resource ->
            if (resource is Resource.Success) {
-               Log.d("qwerty", resource.result.size.toString())
+               Log.d("qwerty getMovieList", resource.result.size.toString())
                setState(
-                   SavedMovieListUIState(
-                       isLoading = false,
+                   SavedMovieListUIState.Data(
                        movieList = resource.result
                    )
                )
@@ -76,14 +76,20 @@ class SavedMovieListViewModel @Inject constructor (
 
     private fun deleteMovie(movieId: Int) = viewModelScope.launch {
         viewModelScope.launch {
-            setEffect (SavedMovieListEffect.ShowWaitDialog)
+            setState(SavedMovieListUIState.Loading)
+            //setEffect (SavedMovieListEffect.ShowWaitDialog)
             val result = savedMovieRepository.deleteMovie(movieId)
             when (result){
-                is Resource.Loading -> Unit
+                is Resource.Loading -> {
+                    setState(SavedMovieListUIState.Loading)
+                }
                 is Resource.Success -> {
-                    setEffect(
-                        SavedMovieListEffect.ShowToast("Movie deleted!")
-                    )
+//                    setEffect(
+//                        SavedMovieListEffect.ShowToast("Movie deleted!")
+//                    )
+                    val movieList = (_uiState.value as SavedMovieListUIState.Data).movieList
+                    setState(SavedMovieListUIState.Data(movieList))
+                    Log.d("qwerty in delete", "uiState: ${movieList.size}")
                 }
                 is Resource.Failure ->
                     setEffect (

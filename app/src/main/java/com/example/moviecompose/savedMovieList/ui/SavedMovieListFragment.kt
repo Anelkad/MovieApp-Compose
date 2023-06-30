@@ -31,40 +31,31 @@ class SavedMovieListFragment : Fragment() {
     val savedMovieListViewModel: SavedMovieListViewModel by viewModels()
     private lateinit var waitDialog: Dialog
 
-    private val movieAdapter: SavedMovieAdapter by lazy {
-        SavedMovieAdapter(
-            onMovieClickListener = {
-                savedMovieListViewModel.onEvent(SavedMovieListEvent.OnMovieClick(it))
-            },
-            deleteMovieListener = {
-                savedMovieListViewModel.onEvent(SavedMovieListEvent.OnDeleteMovieClick(it))
-            }
-        )
-    }
-    private val recyclerView: RecyclerView by lazy {
-        RecyclerView(requireContext()).apply {
-            adapter = movieAdapter
-            layoutManager = LinearLayoutManager(requireContext())
-        }
-    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
+        Log.d("qwerty","Saved Movie OnCreate")
         setContent {
-                val uiState by savedMovieListViewModel.uiState.collectAsState()
-                //todo ui не обновляется при удалении со списка
-                if (uiState.isLoading) ProgressBar()
-                else{
-                    val coroutineScope = rememberCoroutineScope()
-                    LaunchedEffect(key1 = Unit) {
-                        coroutineScope.launch {
-                            movieAdapter.submitList(uiState.movieList)
+            val uiState by savedMovieListViewModel.uiState.collectAsState()
+            //todo ui не обновляется при удалении со списка
+            //todo java.lang.IndexOutOfBoundsException: Index: 3, Size: 3
+            when (val state = uiState){
+                SavedMovieListUIState.Loading -> ProgressBar()
+                is SavedMovieListUIState.Data -> {
+                    SavedMovieListScreen(
+                        movieList = state.movieList,
+                        movieOnClick = {
+                            savedMovieListViewModel.onEvent(SavedMovieListEvent.OnMovieClick(it))
+                        },
+                        movieOnDeleteClick = {
+                            savedMovieListViewModel.onEvent(SavedMovieListEvent.OnDeleteMovieClick(it))
                         }
-                    }
-                    MovieListScreen(recyclerView = recyclerView)
+                    )
+                    Log.d("qwerty SavedMovieFragm", "uiState: ${state.movieList.size}")
                 }
             }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

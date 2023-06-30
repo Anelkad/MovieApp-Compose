@@ -7,11 +7,10 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -433,22 +432,22 @@ fun VideoContent(video: Video){
 
 @Composable
 fun VideoItem(_video: Video){
-    val video = remember { mutableStateOf(_video)}
+    val video by remember { mutableStateOf(_video)}
     Column(
         modifier = Modifier
             .padding(start = 20.dp)
             .width(250.dp)
     ){
-        VideoContent(video.value)
+        VideoContent(video)
         //todo bottom nav не работает с webview на эмуляторе
         Text(
-            text = video.value.name,
+            text = video.name,
             fontWeight = FontWeight.Medium,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
         Text(
-            text = video.value.published_at.take(10),
+            text = video.published_at.take(10),
             color = Color.Gray
         )
     }
@@ -456,7 +455,7 @@ fun VideoItem(_video: Video){
 
 @Composable
 fun VideoBlock(_videoResponse: MovieVideoResponse){
-    val videoResponse = remember { mutableStateOf(_videoResponse) }
+    val videoResponse by remember { mutableStateOf(_videoResponse) }
     Column(
         modifier = Modifier
             .padding(top = 20.dp)
@@ -474,7 +473,7 @@ fun VideoBlock(_videoResponse: MovieVideoResponse){
             )
             Row{
                 Text(
-                    text = videoResponse.value.results.size.toString(),
+                    text = videoResponse.results.size.toString(),
                     color = colorResource(R.color.orange),
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp
@@ -497,7 +496,7 @@ fun VideoBlock(_videoResponse: MovieVideoResponse){
                 .padding(vertical = 10.dp)
                 .horizontalScroll(rememberScrollState())
         ){
-            videoResponse.value.results.forEach{
+            videoResponse.results.forEach{
                 video ->
                 VideoItem(video)
             }

@@ -98,7 +98,7 @@ class MovieListFragment : Fragment() {
         }
 
         movieAdapter.addLoadStateListener{ loadState ->
-            if (loadState.refresh is LoadState.NotLoading)
+            if (loadState.refresh is LoadState.NotLoading && movieAdapter.itemCount>1)
                     movieListViewModel.onEvent(MovieListEvent.StopLoading)
             }
 

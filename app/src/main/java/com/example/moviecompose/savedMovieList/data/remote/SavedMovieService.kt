@@ -17,19 +17,13 @@ import javax.inject.Inject
 class SavedMovieService @Inject constructor(
     val firebase: FirebaseDatabase
 ){
-    fun getSavedMovieList(): Flow<Resource<ArrayList<Movie>>> = callbackFlow {
-        val movieList = ArrayList<Movie>()
-
+    fun getSavedMovieList(): Flow<Resource<List<Movie>>> = callbackFlow {
         val postListener = object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                movieList.clear()
-                for (ds in snapshot.children) {
-                    val movie = ds.getValue(Movie::class.java)
-                    if (movie != null) {
-                        movieList.add(movie)
-                    }
+                val movies = snapshot.children.map {
+                    it.getValue(Movie::class.java)
                 }
-                this@callbackFlow.trySendBlocking(Resource.Success(movieList))
+                this@callbackFlow.trySendBlocking(Resource.Success(movies as List<Movie>))
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -43,6 +37,7 @@ class SavedMovieService @Inject constructor(
         awaitClose{
             firebase.getReference(MOVIES)
                 .removeEventListener(postListener)
+            channel.close()
         }
 
     }

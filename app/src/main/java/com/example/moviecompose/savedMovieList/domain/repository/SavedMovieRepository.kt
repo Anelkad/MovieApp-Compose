@@ -5,7 +5,7 @@ import com.example.moviecompose.utils.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface SavedMovieRepository {
-    fun getSavedMovieList(): Flow<Resource<ArrayList<Movie>>>
+    fun getSavedMovieList(): Flow<Resource<List<Movie>>>
     suspend fun deleteMovie(movieId: Int): Resource<Int>
     suspend fun saveMovie(movie: Movie): Resource<Movie>
 }

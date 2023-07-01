@@ -54,29 +54,22 @@ class SavedMovieListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
-        Log.d("qwerty","Saved Movie OnCreate")
+        savedMovieListViewModel.onEvent(SavedMovieListEvent.ShowMovieList)
         setContent {
-            val uiState by savedMovieListViewModel.uiState.collectAsState()
-            //todo ui не обновляется при удалении со списка
-
+            val uiState: State by savedMovieListViewModel.uiState.collectAsState()
             Log.d("qwerty uiState", uiState.toString())
 
-            when (val state = uiState){
+            when (uiState.movieListState){
                 SavedMovieListUIState.Loading -> ProgressBar()
                 is SavedMovieListUIState.Data -> {
-
+                    val movieList = (uiState.movieListState as SavedMovieListUIState.Data).movieList
+                    movieAdapter.submitList(movieList)
                     MovieListScreen(recyclerView = recyclerView)
-
-                    if (state.movieList.isEmpty())
+                    if (movieList.isEmpty())
                         Text(
                             text = "No saved movies",
                             textAlign = TextAlign.Center
                         )
-                    movieAdapter.submitList(state.movieList.toMutableList())
-
-                    Log.d("qwerty recycler", movieAdapter.itemCount.toString())
-
-                    Log.d("qwerty SavedMovieFragm", "uiState: ${state.movieList.size}")
                 }
             }
         }

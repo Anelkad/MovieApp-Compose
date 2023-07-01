@@ -56,13 +56,13 @@ class SavedMovieListFragment : Fragment() {
     ): View = ComposeView(requireContext()).apply {
         savedMovieListViewModel.onEvent(SavedMovieListEvent.ShowMovieList)
         setContent {
-            val uiState: State by savedMovieListViewModel.uiState.collectAsState()
+            val uiState by savedMovieListViewModel.uiState.collectAsState()
             Log.d("qwerty uiState", uiState.toString())
 
-            when (uiState.movieListState){
+            when (uiState){
                 SavedMovieListUIState.Loading -> ProgressBar()
                 is SavedMovieListUIState.Data -> {
-                    val movieList = (uiState.movieListState as SavedMovieListUIState.Data).movieList
+                    val movieList = (uiState as SavedMovieListUIState.Data).movieList
                     movieAdapter.submitList(movieList)
                     MovieListScreen(recyclerView = recyclerView)
                     if (movieList.isEmpty())

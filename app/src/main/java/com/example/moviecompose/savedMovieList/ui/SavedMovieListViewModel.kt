@@ -24,11 +24,11 @@ class SavedMovieListViewModel @Inject constructor (
     private val savedMovieRepository: SavedMovieRepository
 ) : ViewModel() {
 
-    private val initialState: State by lazy {
-        State(SavedMovieListUIState.Loading)
+    private val initialState: SavedMovieListUIState by lazy {
+        SavedMovieListUIState.Loading
     }
 
-    private val _uiState: MutableStateFlow<State> = MutableStateFlow(initialState)
+    private val _uiState: MutableStateFlow<SavedMovieListUIState> = MutableStateFlow(initialState)
     val uiState = _uiState.asStateFlow()
 
     private val _movieList: MutableStateFlow<ArrayList<Movie>> = MutableStateFlow(ArrayList())
@@ -39,7 +39,7 @@ class SavedMovieListViewModel @Inject constructor (
     private val _effect: Channel<SavedMovieListEffect> = Channel()
     val effect = _effect.receiveAsFlow()
 
-    private fun setState(reduce: State.() -> State) {
+    private fun setState(reduce: SavedMovieListUIState.() -> SavedMovieListUIState) {
         val newState = uiState.value.reduce()
         _uiState.value = newState
     }
@@ -77,11 +77,9 @@ class SavedMovieListViewModel @Inject constructor (
                  when (resource) {
                      is Resource.Success -> {
                              setState {
-                                 copy(
-                                     movieListState =
                                      SavedMovieListUIState.Data(
                                          movieList = resource.result
-                                     )
+
                                  )
                              }
                          Log.d("qwerty getMovieList", resource.result.size.toString())

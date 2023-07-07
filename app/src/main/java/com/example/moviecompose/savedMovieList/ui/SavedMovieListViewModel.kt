@@ -4,7 +4,10 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moviecompose.savedMovieList.domain.repository.SavedMovieRepository
-import com.example.moviecompose.movieList.domain.model.Movie
+import com.example.moviecompose.savedMovieList.ui.modelUI.SavedMovieListEffect
+import com.example.moviecompose.savedMovieList.ui.modelUI.SavedMovieListEvent
+import com.example.moviecompose.savedMovieList.ui.modelUI.SavedMovieListUIState
+import com.example.moviecompose.savedMovieList.ui.modelUI.toUI
 import com.example.moviecompose.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -74,11 +77,9 @@ class SavedMovieListViewModel @Inject constructor (
                      is Resource.Success -> {
                              setState {
                                      SavedMovieListUIState.Data(
-                                         movieList = resource.result
-
+                                         movieList = resource.result.map { it.toDomain().toUI() }
                                  )
                              }
-                         Log.d("qwerty getMovieList", resource.result.size.toString())
                      }
 
                      else -> {}

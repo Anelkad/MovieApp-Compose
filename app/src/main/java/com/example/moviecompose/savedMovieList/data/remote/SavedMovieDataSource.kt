@@ -1,6 +1,6 @@
 package com.example.moviecompose.savedMovieList.data.remote
 
-import com.example.moviecompose.movieList.domain.model.Movie
+import com.example.moviecompose.savedMovieList.domain.model.Movie
 import javax.inject.Inject
 
 class SavedMovieDataSource @Inject constructor(

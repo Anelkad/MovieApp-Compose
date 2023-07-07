@@ -90,7 +90,7 @@ class MovieListViewModel @Inject constructor(
      private fun saveMovie(movie: MovieUI) {
         viewModelScope.launch {
             setEffect (MovieListEffect.ShowWaitDialog)
-            val result = savedMovieRepository.saveMovie(movie.toDomain())
+            val result = savedMovieRepository.saveMovie(movie.toDomainSavedMovie())
             when (result){
                 is Resource.Loading -> Unit
                 is Resource.Success ->

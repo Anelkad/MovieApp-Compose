@@ -5,16 +5,16 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.moviecompose.movieList.domain.model.Movie
 import com.example.moviecompose.savedMovieList.ui.compose.SavedMovieListItemCard
+import com.example.moviecompose.savedMovieList.ui.modelUI.MovieUI
 
 class SavedMovieAdapter(
     private val onMovieClickListener: ((Int) -> Unit),
     private val deleteMovieListener: ((Int) -> Unit)
-): ListAdapter<Movie, SavedMovieAdapter.HolderMovie>(DiffCallback()){
+): ListAdapter<MovieUI, SavedMovieAdapter.HolderMovie>(DiffCallback()){
 
     inner class HolderMovie(private val composeView: ComposeView): RecyclerView.ViewHolder(composeView) {
-        fun bind(movie: Movie) {
+        fun bind(movie: MovieUI) {
             composeView.setContent {
                 SavedMovieListItemCard(
                     movie = movie,
@@ -25,9 +25,9 @@ class SavedMovieAdapter(
         }
     }
 
-    class DiffCallback: DiffUtil.ItemCallback<Movie>() {
-        override fun areItemsTheSame(oldItem: Movie, newItem: Movie) = oldItem.id == newItem.id
-        override fun areContentsTheSame(oldItem: Movie, newItem: Movie) = oldItem == newItem
+    class DiffCallback: DiffUtil.ItemCallback<MovieUI>() {
+        override fun areItemsTheSame(oldItem: MovieUI, newItem: MovieUI) = oldItem.id == newItem.id
+        override fun areContentsTheSame(oldItem: MovieUI, newItem: MovieUI) = oldItem == newItem
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HolderMovie {

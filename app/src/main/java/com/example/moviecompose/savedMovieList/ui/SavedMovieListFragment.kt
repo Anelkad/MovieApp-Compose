@@ -22,6 +22,9 @@ import com.example.moviecompose.R
 import com.example.moviecompose.adapters.SavedMovieAdapter
 import com.example.moviecompose.movieDetails.ui.compose.ProgressBar
 import com.example.moviecompose.movieList.ui.compose.MovieListScreen
+import com.example.moviecompose.savedMovieList.ui.modelUI.SavedMovieListEffect
+import com.example.moviecompose.savedMovieList.ui.modelUI.SavedMovieListEvent
+import com.example.moviecompose.savedMovieList.ui.modelUI.SavedMovieListUIState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

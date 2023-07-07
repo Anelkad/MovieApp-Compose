@@ -8,11 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.moviecompose.movieList.domain.model.Movie
+import com.example.moviecompose.savedMovieList.ui.modelUI.MovieUI
 
 @Composable
 fun SavedMovieListScreen(
-    movieList: ArrayList<Movie>,
+    movieList: ArrayList<MovieUI>,
     movieOnClick: (Int) -> Unit = {},
     movieOnDeleteClick: (Int) -> Unit = {}
 ){

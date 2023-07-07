@@ -1,6 +1,5 @@
 package com.example.moviecompose.movieDetails.data.modelDTO
 
-import com.example.moviecompose.movieList.domain.model.Movie
 import com.google.gson.annotations.SerializedName
 
 //todo DTO
@@ -26,7 +25,4 @@ data class MovieDetails(
     val tagline: String,
     val revenue: Int,
     val runtime: Int
-){
-    fun toMovie(): Movie =
-        Movie(id, title, overview, releaseDate, posterPath, backdropPath, voteAverage)
-}
+)

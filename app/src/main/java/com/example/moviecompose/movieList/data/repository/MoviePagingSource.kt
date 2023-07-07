@@ -25,7 +25,7 @@ class MoviePagingSource(
             Log.d("qwerty PagingSource", movieListResponse.results.toString())
 
             val list = buildList{
-                addAll(movieListResponse.results.map { ListItem.MovieItem(it)} )
+                addAll(movieListResponse.results.map { ListItem.MovieItem(it.toDomain())} )
                 //каждые 10 фильмов - реклама
                 add(10, ListItem.AdItem(ad))
                 add(21, ListItem.AdItem(ad))

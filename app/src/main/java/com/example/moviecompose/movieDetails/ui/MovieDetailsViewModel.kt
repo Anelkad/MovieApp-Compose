@@ -3,6 +3,9 @@ package com.example.moviecompose.movieDetails.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moviecompose.movieDetails.domain.repository.MovieDetailsRepository
+import com.example.moviecompose.movieDetails.ui.modelUI.MovieDetailsEffect
+import com.example.moviecompose.movieDetails.ui.modelUI.MovieDetailsEvent
+import com.example.moviecompose.movieDetails.ui.modelUI.MovieDetailsUIState
 import com.example.moviecompose.savedMovieList.domain.repository.SavedMovieRepository
 import com.example.moviecompose.movieList.domain.model.Movie
 import com.example.moviecompose.utils.Resource

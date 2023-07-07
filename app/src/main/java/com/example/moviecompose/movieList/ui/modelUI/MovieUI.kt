@@ -6,7 +6,7 @@ data class MovieUI(
     val id: Int,
     val title: String,
     val overview: String?,
-    val releaseDate: String,
+    val releaseDate: String?,
     val posterPath: String?,
     val backdropPath: String?,
     val voteAverage: Float?
@@ -15,7 +15,7 @@ data class MovieUI(
         id = id,
         title = title,
         overview = overview?:"",
-        releaseDate = releaseDate,
+        releaseDate = releaseDate?:"",
         posterPath = posterPath?:"",
         backdropPath = backdropPath?:"",
         voteAverage = voteAverage?:0F

@@ -1,4 +1,4 @@
-package com.example.moviecompose.movieDetails.ui
+package com.example.moviecompose.movieDetails.ui.modelUI
 
 import com.example.moviecompose.movieList.domain.model.Movie
 

@@ -16,13 +16,24 @@ data class MovieDTO(
     @SerializedName("vote_average")
     var voteAverage: Float = 0F
 ){
-    fun toDomain() = Movie(
-        id,
-        title,
-        overview,
-        releaseDate,
-        posterPath,
-        backdropPath,
-        voteAverage
-    )
+    fun toDomain(): Movie =
+        Movie(
+            id = id,
+            title = title,
+            overview = overview,
+            releaseDate = releaseDate,
+            posterPath = posterPath,
+            backdropPath = backdropPath,
+            voteAverage = voteAverage
+        )
 }
+
+fun Movie.toDTO(): MovieDTO = MovieDTO(
+    id = id,
+    title = title,
+    overview = overview,
+    releaseDate = releaseDate,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    voteAverage = voteAverage
+)

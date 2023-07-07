@@ -15,13 +15,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.moviecompose.R
-import com.example.moviecompose.movieList.data.modelDTO.Ad
+import com.example.moviecompose.movieList.domain.model.Ad
+import com.example.moviecompose.movieList.ui.modelUI.AdUI
 import com.example.moviecompose.ui.theme.MovieComposeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AdListItemCard(
-    ad: Ad = Ad(
+    ad: AdUI = AdUI(
         "1Fit",
         "Абонемент на все виды спорта",
         "https://resources.cdn-kaspi.kz/shop/medias/sys_master/images/images/h4b/hf7/47592727773214/1fit-bezlimit-3-mesaca-101420202-1-Container.png"
@@ -45,7 +46,7 @@ fun AdListItemCard(
 
 @Composable
 fun AdListItemContent(
-    ad: Ad
+    ad: AdUI
 ){
     AsyncImage(
         model = ad.image,

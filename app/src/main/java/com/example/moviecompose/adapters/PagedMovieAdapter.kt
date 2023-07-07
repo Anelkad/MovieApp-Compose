@@ -5,17 +5,17 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.moviecompose.movieList.data.modelDTO.Ad
-import com.example.moviecompose.movieList.data.modelDTO.ListItem
-import com.example.moviecompose.movieList.domain.model.Movie
 import com.example.moviecompose.movieList.ui.compose.AdListItemCard
 import com.example.moviecompose.movieList.ui.compose.MovieListItemCard
+import com.example.moviecompose.movieList.ui.modelUI.AdUI
+import com.example.moviecompose.movieList.ui.modelUI.ListItemUI
+import com.example.moviecompose.movieList.ui.modelUI.MovieUI
 
 class PagedMovieAdapter(
     private val onMovieClickListener: ((Int) -> Unit),
-    private val saveMovieListener: ((Movie) -> Unit)
+    private val saveMovieListener: ((MovieUI) -> Unit)
 ) :
-    PagingDataAdapter<ListItem, PagedMovieAdapter.ComposeMovieViewHolder>(
+    PagingDataAdapter<ListItemUI, PagedMovieAdapter.ComposeMovieViewHolder>(
         DiffCallback()
     ) {
 
@@ -23,19 +23,19 @@ class PagedMovieAdapter(
         private val composeView: ComposeView
     ): RecyclerView.ViewHolder(composeView) {
 
-        fun bind(item: ListItem) {
+        fun bind(item: ListItemUI) {
             when(item) {
-                is ListItem.MovieItem -> bindMovies(
+                is ListItemUI.MovieItemUI -> bindMovies(
                     item.movie,
                     saveMovieListener,
                     onMovieClickListener
                 )
-                is ListItem.AdItem -> bindAds(item.ad)
+                is ListItemUI.AdItemUI -> bindAds(item.ad)
             }
         }
 
         private fun bindAds(
-            ad: Ad
+            ad: AdUI
         ) {
             composeView.setContent {
                 AdListItemCard(
@@ -45,8 +45,8 @@ class PagedMovieAdapter(
         }
 
         private fun bindMovies(
-            movie: Movie,
-            saveMovieListener: (Movie) -> Unit,
+            movie: MovieUI,
+            saveMovieListener: (MovieUI) -> Unit,
             onMovieClickListener: (Int) -> Unit
         ) {
             composeView.setContent {
@@ -68,19 +68,19 @@ class PagedMovieAdapter(
         getItem(position)?.let { holder.bind(it) }
     }
 
-    class DiffCallback : DiffUtil.ItemCallback<ListItem>() {
-        override fun areItemsTheSame(oldItem: ListItem, newItem: ListItem): Boolean {
-            val isSameMovieItem = oldItem is ListItem.MovieItem
-                    && newItem is ListItem.MovieItem
+    class DiffCallback : DiffUtil.ItemCallback<ListItemUI>() {
+        override fun areItemsTheSame(oldItem: ListItemUI, newItem: ListItemUI): Boolean {
+            val isSameMovieItem = oldItem is ListItemUI.MovieItemUI
+                    && newItem is ListItemUI.MovieItemUI
                     && oldItem.movie.id == newItem.movie.id
 
-            val isSameAdItem = oldItem is ListItem.AdItem
-                    && newItem is ListItem.AdItem
+            val isSameAdItem = oldItem is ListItemUI.AdItemUI
+                    && newItem is ListItemUI.AdItemUI
                     && oldItem.ad == newItem.ad
 
             return isSameMovieItem || isSameAdItem
         }
 
-        override fun areContentsTheSame(oldItem: ListItem, newItem: ListItem) = oldItem == newItem
+        override fun areContentsTheSame(oldItem: ListItemUI, newItem: ListItemUI) = oldItem == newItem
     }
 }

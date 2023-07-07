@@ -1,11 +1,17 @@
 package com.example.moviecompose.movieList.ui
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.moviecompose.movieList.domain.model.Movie
+import androidx.paging.map
 import com.example.moviecompose.movieList.domain.repository.MovieListRepository
+import com.example.moviecompose.movieList.ui.modelUI.MovieListEffect
+import com.example.moviecompose.movieList.ui.modelUI.MovieListEvent
+import com.example.moviecompose.movieList.ui.modelUI.MovieListUIState
+import com.example.moviecompose.movieList.ui.modelUI.MovieUI
+import com.example.moviecompose.movieList.ui.modelUI.toUI
 import com.example.moviecompose.savedMovieList.domain.repository.SavedMovieRepository
 import com.example.moviecompose.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -68,7 +74,10 @@ class MovieListViewModel @Inject constructor(
                     .cachedIn(viewModelScope)
                     .collectLatest { pagingData ->
                         setState(_uiState.value.copy(
-                            pagingData = pagingData
+                            pagingData = pagingData.map {
+                                Log.d("qwerty ListItem", it.toString())
+                                it.toUI()
+                               }
                             )
                         )
                     }
@@ -78,10 +87,10 @@ class MovieListViewModel @Inject constructor(
         }
     }
 
-     private fun saveMovie(movie: Movie) {
+     private fun saveMovie(movie: MovieUI) {
         viewModelScope.launch {
             setEffect (MovieListEffect.ShowWaitDialog)
-            val result = savedMovieRepository.saveMovie(movie)
+            val result = savedMovieRepository.saveMovie(movie.toDomain())
             when (result){
                 is Resource.Loading -> Unit
                 is Resource.Success ->

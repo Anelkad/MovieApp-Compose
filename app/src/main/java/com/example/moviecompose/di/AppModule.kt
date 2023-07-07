@@ -34,7 +34,7 @@ object AppModule {
         return OkHttpClient.Builder()
             .addInterceptor(interceptor)
             .build()
-    }
+    }//todo handle exceptions on network connection
     @Provides
     @Singleton
     fun provideMovieListService(retrofit: Retrofit): MovieListApiService =

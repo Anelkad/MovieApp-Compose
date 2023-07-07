@@ -1,4 +1,4 @@
-package com.example.moviecompose.movieList.ui
+package com.example.moviecompose.movieList.ui.modelUI
 
 
 sealed interface MovieListEffect {

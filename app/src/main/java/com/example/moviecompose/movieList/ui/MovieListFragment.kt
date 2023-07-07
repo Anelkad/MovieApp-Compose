@@ -3,6 +3,7 @@ package com.example.moviecompose.movieList.ui
 import android.app.Dialog
 import androidx.fragment.app.Fragment
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +11,6 @@ import android.widget.Toast
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.viewModels
@@ -21,9 +21,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.moviecompose.R
+import com.example.moviecompose.adapters.MovieLoadStateAdapter
 import com.example.moviecompose.adapters.PagedMovieAdapter
 import com.example.moviecompose.movieList.ui.compose.MovieListScreen
 import com.example.moviecompose.movieList.ui.compose.ProgressBar
+import com.example.moviecompose.movieList.ui.modelUI.MovieListEffect
+import com.example.moviecompose.movieList.ui.modelUI.MovieListEvent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -44,8 +47,11 @@ class MovieListFragment : Fragment() {
                     MovieListEvent.OnSaveMovieClick(it)
                 )
             }
-        )
+        ).apply {
+            withLoadStateFooter(MovieLoadStateAdapter { movieAdapter.retry()})
+        }
     }
+
 
     private val recyclerView: RecyclerView by lazy {
         RecyclerView(requireContext()).apply {
@@ -69,6 +75,8 @@ class MovieListFragment : Fragment() {
                 }
             }
             if (uiState.isLoading) ProgressBar()
+            Log.d("qwerty movie paging", movieAdapter.itemCount.toString())
+            
             MovieListScreen(recyclerView = recyclerView)
             //todo MovieListScreen передать LoadState adapter
         }

@@ -17,15 +17,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.moviecompose.R
-import com.example.moviecompose.movieList.domain.model.Movie
+import com.example.moviecompose.movieList.ui.modelUI.MovieUI
 import com.example.moviecompose.ui.theme.MovieComposeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MovieListItemCard(
-    movie: Movie,
+    movie: MovieUI,
     movieOnClick: (Int) -> Unit,
-    movieOnSaveClick: (Movie) -> Unit
+    movieOnSaveClick: (MovieUI) -> Unit
 ) {
     Card(
         colors = CardDefaults.cardColors(
@@ -46,8 +46,8 @@ fun MovieListItemCard(
 
 @Composable
 fun MovieListItemContent(
-    movie: Movie,
-    movieOnSaveClick: (Movie) -> Unit
+    movie: MovieUI,
+    movieOnSaveClick: (MovieUI) -> Unit
 ){
     AsyncImage(
         model = IMAGE_URL.plus(movie.posterPath),

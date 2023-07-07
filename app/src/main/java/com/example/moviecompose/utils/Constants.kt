@@ -1,4 +1,6 @@
 
+
+//todo BuildConfig
 const val API_KEY = "7754ef3c3751d04070c226b198665358"
 const val LANGUAGE = "ru-RU"
 const val BASE_URL = "https://api.themoviedb.org/3/"

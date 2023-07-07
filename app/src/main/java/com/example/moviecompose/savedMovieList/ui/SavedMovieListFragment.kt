@@ -9,10 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.compose.material.Text
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.text.style.TextAlign
 import androidx.fragment.app.viewModels
@@ -24,7 +22,6 @@ import com.example.moviecompose.R
 import com.example.moviecompose.adapters.SavedMovieAdapter
 import com.example.moviecompose.movieDetails.ui.compose.ProgressBar
 import com.example.moviecompose.movieList.ui.compose.MovieListScreen
-import com.example.moviecompose.savedMovieList.ui.compose.SavedMovieListScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

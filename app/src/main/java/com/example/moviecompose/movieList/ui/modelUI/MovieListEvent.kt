@@ -1,6 +1,5 @@
-package com.example.moviecompose.movieList.ui
+package com.example.moviecompose.movieList.ui.modelUI
 
-import com.example.moviecompose.movieList.domain.model.Movie
 
 sealed interface MovieListEvent {
     object StopLoading: MovieListEvent
@@ -9,6 +8,6 @@ sealed interface MovieListEvent {
     ) : MovieListEvent
 
     data class OnSaveMovieClick(
-        var movie: Movie
+        var movie: MovieUI
     ) : MovieListEvent
 }

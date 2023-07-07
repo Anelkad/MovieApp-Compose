@@ -7,7 +7,6 @@ import com.example.moviecompose.savedMovieList.domain.repository.SavedMovieRepos
 import com.example.moviecompose.movieList.domain.model.Movie
 import com.example.moviecompose.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +14,6 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,8 +28,6 @@ class SavedMovieListViewModel @Inject constructor (
 
     private val _uiState: MutableStateFlow<SavedMovieListUIState> = MutableStateFlow(initialState)
     val uiState = _uiState.asStateFlow()
-
-    private val _movieList: MutableStateFlow<ArrayList<Movie>> = MutableStateFlow(ArrayList())
 
     private val _event: MutableSharedFlow<SavedMovieListEvent> = MutableSharedFlow()
     val event = _event.asSharedFlow()

@@ -2,8 +2,8 @@ package com.example.moviecompose.movieDetails.data.remote
 
 import API_KEY
 import LANGUAGE
-import com.example.moviecompose.movieDetails.data.modelDTO.MovieDetails
-import com.example.moviecompose.movieDetails.data.modelDTO.MovieVideoResponse
+import com.example.moviecompose.movieDetails.data.modelDTO.MovieDetailsDTO
+import com.example.moviecompose.movieDetails.data.modelDTO.MovieVideoResponseDTO
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -17,7 +17,7 @@ interface MovieDetailsApiService {
         api_key: String = API_KEY,
         @Query("language")
         language: String = LANGUAGE
-    ): MovieDetails
+    ): MovieDetailsDTO
 
     @GET("movie/{movie_id}/videos")
     suspend fun getMovieVideo(
@@ -25,5 +25,5 @@ interface MovieDetailsApiService {
         movie_id: Int,
         @Query("api_key")
         api_key: String = API_KEY
-    ): MovieVideoResponse
+    ): MovieVideoResponseDTO
 }

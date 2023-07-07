@@ -35,13 +35,13 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import coil.compose.AsyncImage
 import com.example.moviecompose.R
-import com.example.moviecompose.movieDetails.data.modelDTO.MovieDetails
-import com.example.moviecompose.movieDetails.data.modelDTO.MovieVideoResponse
-import com.example.moviecompose.movieDetails.data.modelDTO.Video
+import com.example.moviecompose.movieDetails.ui.modelUI.MovieDetailsUI
+import com.example.moviecompose.movieDetails.ui.modelUI.MovieVideoResponseUI
+import com.example.moviecompose.movieDetails.ui.modelUI.VideoUI
 import com.example.moviecompose.ui.theme.MovieComposeTheme
 
 @Composable
-fun MovieGeneralInfo(movie: MovieDetails){
+fun MovieGeneralInfo(movie: MovieDetailsUI){
     Text(
         text = movie.title,
         textAlign = TextAlign.Center,
@@ -250,7 +250,7 @@ fun RowOfIconButton(){
 
 @Composable
 fun MovieDetailsInfo(
-    movie: MovieDetails
+    movie: MovieDetailsUI
 ){
     Column(
         modifier = Modifier
@@ -287,7 +287,7 @@ fun MovieDetailsInfo(
 
 @Composable
 fun KinopoiskRatingBlock(
-    movie: MovieDetails
+    movie: MovieDetailsUI
 ){
     Column(
         modifier = Modifier
@@ -414,7 +414,7 @@ fun HorizontalRowOfRating(){
 
 
 @Composable
-fun VideoContent(video: Video){
+fun VideoContent(video: VideoUI){
     val webViewState = remember { mutableStateOf("https://www.youtube.com/watch?v=${video.key}")}
     AndroidView(
         factory = {context ->
@@ -433,7 +433,7 @@ fun VideoContent(video: Video){
 }
 
 @Composable
-fun VideoItem(_video: Video){
+fun VideoItem(_video: VideoUI){
     val video by remember { mutableStateOf(_video)}
     Column(
         modifier = Modifier
@@ -456,7 +456,7 @@ fun VideoItem(_video: Video){
 }
 
 @Composable
-fun VideoBlock(_videoResponse: MovieVideoResponse){
+fun VideoBlock(_videoResponse: MovieVideoResponseUI){
     val videoResponse by remember { mutableStateOf(_videoResponse) }
     Column(
         modifier = Modifier
@@ -510,7 +510,7 @@ fun VideoBlock(_videoResponse: MovieVideoResponse){
 
 @Composable
 fun MovieDetailsKinopoiskContent(
-    movie: MovieDetails,
+    movie: MovieDetailsUI,
     modifier: Modifier
 ) {
     Column(

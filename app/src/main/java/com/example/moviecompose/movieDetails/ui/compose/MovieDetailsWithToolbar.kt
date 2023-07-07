@@ -28,17 +28,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.moviecompose.R
-import com.example.moviecompose.movieDetails.data.modelDTO.Genre
-import com.example.moviecompose.movieDetails.data.modelDTO.MovieDetails
-import com.example.moviecompose.movieDetails.data.modelDTO.MovieVideoResponse
-import com.example.moviecompose.movieDetails.data.modelDTO.ProductionCountry
-import com.example.moviecompose.movieDetails.data.modelDTO.Video
+import com.example.moviecompose.movieDetails.ui.modelUI.GenreUI
+import com.example.moviecompose.movieDetails.ui.modelUI.MovieDetailsUI
+import com.example.moviecompose.movieDetails.ui.modelUI.MovieVideoResponseUI
+import com.example.moviecompose.movieDetails.ui.modelUI.ProductionCountryUI
+import com.example.moviecompose.movieDetails.ui.modelUI.VideoUI
 import com.example.moviecompose.ui.theme.MovieComposeTheme
 
 
 @Composable
 fun MovieDetailsWithToolbar(
-    movie: MovieDetails = MovieDetails(
+    movie: MovieDetailsUI = MovieDetailsUI(
         1,
         "Kino",
         "Kino original",
@@ -48,16 +48,16 @@ fun MovieDetailsWithToolbar(
         "https://lumiere-a.akamaihd.net/v1/images/p_thelittlemermaid_2023_final_796_94759fcc.jpeg",
         5.0F,
         120,
-        listOf(ProductionCountry("JP", "Japan")),
-        listOf(Genre(16, "мультфильм"), Genre(18, "анимация")),
+        listOf(ProductionCountryUI("JP", "Japan")),
+        listOf(GenreUI(16, "мультфильм"), GenreUI(18, "анимация")),
         "Hello World",
         12000000,
         121
     ),
-    videos: MovieVideoResponse = MovieVideoResponse(
+    videos: MovieVideoResponseUI = MovieVideoResponseUI(
         1,
         List(5){
-            Video(
+            VideoUI(
                 "1",
                 "d",
                 "1",
@@ -95,7 +95,7 @@ fun Toolbar(
     scroll: ScrollState,
     headerHeightPx: Float,
     toolbarHeight: Float,
-    movie: MovieDetails,
+    movie: MovieDetailsUI,
     onBackClick: () -> Unit
 ) {
     val toolbarBottom by remember {
@@ -204,9 +204,9 @@ fun Header(scroll: ScrollState, moviePoster: String) {
 
 @Composable
 fun MovieDetailsContent(
-    movie: MovieDetails,
+    movie: MovieDetailsUI,
     scroll: ScrollState,
-    videos: MovieVideoResponse
+    videos: MovieVideoResponseUI
 ) {
     Column(
         modifier = Modifier

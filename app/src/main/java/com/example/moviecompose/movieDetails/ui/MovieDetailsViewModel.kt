@@ -6,9 +6,7 @@ import com.example.moviecompose.movieDetails.domain.repository.MovieDetailsRepos
 import com.example.moviecompose.movieDetails.ui.modelUI.MovieDetailsEffect
 import com.example.moviecompose.movieDetails.ui.modelUI.MovieDetailsEvent
 import com.example.moviecompose.movieDetails.ui.modelUI.MovieDetailsUIState
-import com.example.moviecompose.savedMovieList.domain.repository.SavedMovieRepository
-import com.example.moviecompose.movieList.domain.model.Movie
-import com.example.moviecompose.utils.Resource
+import com.example.moviecompose.movieDetails.ui.modelUI.toUI
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -20,8 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MovieDetailsViewModel @Inject constructor(
-    private val movieDetailsRepository: MovieDetailsRepository,
-    private val savedMovieRepository: SavedMovieRepository
+    private val movieDetailsRepository: MovieDetailsRepository
     ): ViewModel() {
 
     private val initialState: MovieDetailsUIState by lazy {
@@ -48,9 +45,6 @@ class MovieDetailsViewModel @Inject constructor(
             is MovieDetailsEvent.LoadMovieDetails -> getMovieDetails(event.movieId)
             is MovieDetailsEvent.OnBackClick ->
                 setEffect (MovieDetailsEffect.NavigateBack)
-            is MovieDetailsEvent.OnSaveMovieClick -> {
-                saveMovie(event.movie)
-            }
         }
     }
     private fun getMovieDetails(movieId: Int) {
@@ -61,31 +55,13 @@ class MovieDetailsViewModel @Inject constructor(
 
                 setState(
                     MovieDetailsUIState.Data(
-                        movie = movieDetails,
-                        videos = videos
+                        movie = movieDetails.toUI(),
+                        videos = videos.toUI()
                     )
                 )
 
             } catch (e: Exception) {
                 setEffect (MovieDetailsEffect.ShowToast("Something went wrong. Reason: ${e.message ?: e.localizedMessage}"))
-            }
-        }
-    }
-
-    private fun saveMovie(movie: Movie) {
-        viewModelScope.launch {
-            setEffect (MovieDetailsEffect.ShowWaitDialog)
-            val result = savedMovieRepository.saveMovie(movie)
-            when (result){
-                is Resource.Loading -> Unit
-                is Resource.Success ->
-                    setEffect (
-                        MovieDetailsEffect.ShowToast("Movie \"${result.result.title}\" saved!")
-                    )
-                is Resource.Failure ->
-                    setEffect (
-                        MovieDetailsEffect.ShowToast("Cannot save movie!")
-                    )
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.example.moviecompose.movieDetails.data.modelDTO
+package com.example.moviecompose.movieDetails.domain.model
 
 data class ProductionCountry(
     val iso_3166_1: String,

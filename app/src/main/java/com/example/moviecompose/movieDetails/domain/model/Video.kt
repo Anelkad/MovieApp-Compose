@@ -1,4 +1,4 @@
-package com.example.moviecompose.movieDetails.data.modelDTO
+package com.example.moviecompose.movieDetails.domain.model
 
 data class Video(
     val id: String,

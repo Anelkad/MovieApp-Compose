@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="padding_20">20dp</dimen>
+    <dimen name="font_size_20">20sp</dimen>
+    <dimen name="spacer_height_10">10dp</dimen>
+    <dimen name="padding_5">5dp</dimen>
+    <dimen name="padding_10">10dp</dimen>
+    <dimen name="border_05">0.5dp</dimen>
+    <dimen name="corner_5">5dp</dimen>
+</resources>

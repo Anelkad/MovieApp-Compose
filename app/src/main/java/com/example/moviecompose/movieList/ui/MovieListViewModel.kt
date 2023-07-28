@@ -73,11 +73,9 @@ class MovieListViewModel @Inject constructor(
                 movieListRepository.getPagedMovieList()
                     .cachedIn(viewModelScope)
                     .collectLatest { pagingData ->
-                        setState(_uiState.value.copy(
-                            pagingData = pagingData.map {
-                                Log.d("qwerty ListItem", it.toString())
-                                it.toUI()
-                               }
+                        setState(
+                            _uiState.value.copy(
+                                pagingData = pagingData.map { it.toUI() }
                             )
                         )
                     }

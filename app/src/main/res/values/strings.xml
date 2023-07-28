@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">MovieCompose</string>
+
+    <string name="email">Почта</string>
+    <string name="password">Пароль</string>
+    <string name="forgot_password">Я не помню свой пароль</string>
+    <string name="login">Войти</string>
+    <string name="signup">Зарегистрироваться</string>
+
+    <plurals name="rating">
+        <item quantity="one">%1$d оценка</item>
+        <item quantity="two">%1$d оценки</item>
+        <item quantity="many">%1$d оценок</item>
+    </plurals>
 </resources>

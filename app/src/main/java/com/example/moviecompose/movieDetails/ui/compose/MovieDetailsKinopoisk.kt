@@ -56,7 +56,7 @@ fun MovieGeneralInfo(movie: MovieDetailsUI){
                 style = SpanStyle(
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
-                    color = colorResource(R.color.rating)
+                    color = colorResource(R.color.green)
                 )
             ) {
                 append(movie.voteAverage.toString())
@@ -313,7 +313,7 @@ fun KinopoiskRatingBlock(
                 text = movie.voteAverage.toString(),
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 70.sp,
-                color = colorResource(R.color.rating),
+                color = colorResource(R.color.green),
                 modifier = Modifier.height(80.dp)
             )
             Text(

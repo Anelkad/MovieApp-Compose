@@ -49,6 +49,7 @@ class MovieListFragment : Fragment() {
             }
         ).apply {
             withLoadStateFooter(MovieLoadStateAdapter { movieAdapter.retry()})
+            //todo не видно прогрузку
         }
     }
 
@@ -64,8 +65,8 @@ class MovieListFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = ComposeView(requireContext()).apply {
-        setContent {
+        ): View = ComposeView(requireContext()).apply {
+            setContent {
             val uiState by movieListViewModel.uiState.collectAsState()
 
             val coroutineScope = rememberCoroutineScope()
@@ -95,20 +96,18 @@ class MovieListFragment : Fragment() {
                             Toast.LENGTH_LONG
                         ).show()
                     }
-                    MovieListEffect.ShowWaitDialog -> {
+                    MovieListEffect.ShowWaitDialog ->
                         showWaitDialog()
-                    }
-                    is MovieListEffect.NavigateToMovieDetails -> {
+                    is MovieListEffect.NavigateToMovieDetails ->
                         navigateToMovieDetails(it.movieId)
-                    }
                 }
             }
         }
 
-        movieAdapter.addLoadStateListener{ loadState ->
+        movieAdapter.addLoadStateListener { loadState ->
             if (loadState.refresh is LoadState.NotLoading && movieAdapter.itemCount>1)
-                    movieListViewModel.onEvent(MovieListEvent.StopLoading)
-            }
+                movieListViewModel.onEvent(MovieListEvent.StopLoading)
+        }
 
 
 //        lifecycleScope.launch {

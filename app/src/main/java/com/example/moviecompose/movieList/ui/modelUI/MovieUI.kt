@@ -12,7 +12,7 @@ data class MovieUI(
     val backdropPath: String?,
     val voteAverage: Float?
 ){
-    fun toDomain(): Movie = Movie(
+    fun toDomainMovie(): Movie = Movie(
         id = id,
         title = title,
         overview = overview?:"",

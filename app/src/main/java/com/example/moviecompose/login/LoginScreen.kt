@@ -21,6 +21,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.internal.enableLiveLiterals
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -50,71 +51,14 @@ fun LoginScreen(
         modifier = modifier
     ){
         Column {
-            TextField(
-                value = email,
-                onValueChange = { email = it },
-                modifier = Modifier.fillMaxWidth(),
-                label = {
-                    Text(
-                        text = stringResource(R.string.email),
-                        color = Color.Gray
-                    )
-                },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Email
-                ),
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.Transparent,
-                    textColor = MaterialTheme.colorScheme.onPrimary,
-                    cursorColor = MaterialTheme.colorScheme.tertiary,
-                    focusedIndicatorColor = MaterialTheme.colorScheme.tertiary
-                ),
-                textStyle = TextStyle(
-                    fontWeight = FontWeight.Medium,
-                    fontSize = with(LocalDensity.current) {
-                        dimensionResource(R.dimen.font_size_20).toSp()
-                    }
-                ),
-                singleLine = true
+            EmailTextField(
+                email = email,
+                onValueChange = { email = it }
             )
             Spacer(modifier = Modifier.height(dimensionResource(R.dimen.spacer_height_10)))
-            TextField(
-                value = password,
-                onValueChange = { password = it },
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Password
-                ),
-                label = {
-                    Text(
-                        text = stringResource(R.string.password),
-                        color = Color.Gray
-                    )
-                },
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.Transparent,
-                    textColor = MaterialTheme.colorScheme.onPrimary,
-                    cursorColor = MaterialTheme.colorScheme.tertiary,
-                    focusedIndicatorColor = MaterialTheme.colorScheme.tertiary
-                ),
-                textStyle = TextStyle(
-                    fontWeight = FontWeight.Medium,
-                    fontSize = with(LocalDensity.current) {
-                        dimensionResource(R.dimen.font_size_20).toSp()
-                    }
-                ),
-                visualTransformation = remember { PasswordVisualTransformation() },
-                singleLine = true,
-                trailingIcon = {
-                    IconButton(
-                        onClick = {}
-                    ){
-                        Icon(
-                            painter = painterResource(R.drawable.baseline_remove_red_eye_24),
-                            contentDescription = null
-                        )
-                    }
-                }
+            PasswordTextField(
+                password = password,
+                onValueChange = { password = it }
             )
             Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_20)))
             ClickableText(
@@ -124,36 +68,133 @@ fun LoginScreen(
                 onClick = {}
             )
             Spacer(modifier = Modifier.height(dimensionResource(R.dimen.spacer_height_10)))
-            Button(
-                onClick = {},
-                shape = RoundedCornerShape(dimensionResource(R.dimen.corner_5)),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                ),
-                contentPadding = PaddingValues(vertical = dimensionResource(R.dimen.padding_10)),
-                modifier = Modifier.fillMaxWidth()
-            ){
-                Text(text = stringResource(R.string.login))
-            }
+            LoginButton(
+                onClick = {}
+            )
             Spacer(modifier = Modifier.height(dimensionResource(R.dimen.spacer_height_10)))
-            Button(
-                onClick = {},
-                shape = RoundedCornerShape(dimensionResource(R.dimen.corner_5)),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                ),
-                border = BorderStroke(
-                    width = dimensionResource(R.dimen.border_05),
-                    color = Color.LightGray
-                ),
-                contentPadding = PaddingValues(vertical = dimensionResource(R.dimen.padding_10)),
-                modifier = Modifier.fillMaxWidth()
+            SignUpButton(
+                onClick = {}
+            )
+        }
+    }
+}
+
+@Composable
+fun EmailTextField(
+    email: String,
+    onValueChange: (String) -> Unit
+){
+    TextField(
+        value = email,
+        onValueChange = onValueChange,
+        modifier = Modifier.fillMaxWidth(),
+        label = {
+            Text(
+                text = stringResource(R.string.email),
+                color = Color.Gray
+            )
+        },
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Email
+        ),
+        colors = TextFieldDefaults.textFieldColors(
+            containerColor = Color.Transparent,
+            textColor = MaterialTheme.colorScheme.onPrimary,
+            cursorColor = MaterialTheme.colorScheme.tertiary,
+            focusedIndicatorColor = MaterialTheme.colorScheme.tertiary
+        ),
+        textStyle = TextStyle(
+            fontWeight = FontWeight.Medium,
+            fontSize = with(LocalDensity.current) {
+                dimensionResource(R.dimen.font_size_20).toSp()
+            }
+        ),
+        singleLine = true
+    )
+}
+
+@Composable
+fun PasswordTextField(
+    password: String,
+    onValueChange: (String) -> Unit
+){
+    TextField(
+        value = password,
+        onValueChange = onValueChange,
+        modifier = Modifier.fillMaxWidth(),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Password
+        ),
+        label = {
+            Text(
+                text = stringResource(R.string.password),
+                color = Color.Gray
+            )
+        },
+        colors = TextFieldDefaults.textFieldColors(
+            containerColor = Color.Transparent,
+            textColor = MaterialTheme.colorScheme.onPrimary,
+            cursorColor = MaterialTheme.colorScheme.tertiary,
+            focusedIndicatorColor = MaterialTheme.colorScheme.tertiary
+        ),
+        textStyle = TextStyle(
+            fontWeight = FontWeight.Medium,
+            fontSize = with(LocalDensity.current) {
+                dimensionResource(R.dimen.font_size_20).toSp()
+            }
+        ),
+        visualTransformation = remember { PasswordVisualTransformation() },
+        singleLine = true,
+        trailingIcon = {
+            IconButton(
+                onClick = {}
             ){
-                Text(text = stringResource(R.string.signup))
+                Icon(
+                    painter = painterResource(R.drawable.baseline_remove_red_eye_24),
+                    contentDescription = null
+                )
             }
         }
+    )
+}
+
+@Composable
+fun LoginButton(
+    onClick: () -> Unit
+){
+    Button(
+        onClick = onClick,
+        shape = RoundedCornerShape(dimensionResource(R.dimen.corner_5)),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary
+        ),
+        contentPadding = PaddingValues(vertical = dimensionResource(R.dimen.padding_10)),
+        modifier = Modifier.fillMaxWidth()
+    ){
+        Text(text = stringResource(R.string.login))
+    }
+}
+
+@Composable
+fun SignUpButton(
+    onClick: () -> Unit
+){
+    Button(
+        onClick = onClick,
+        shape = RoundedCornerShape(dimensionResource(R.dimen.corner_5)),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.White,
+            contentColor = MaterialTheme.colorScheme.onPrimary
+        ),
+        border = BorderStroke(
+            width = dimensionResource(R.dimen.border_05),
+            color = Color.LightGray
+        ),
+        contentPadding = PaddingValues(vertical = dimensionResource(R.dimen.padding_10)),
+        modifier = Modifier.fillMaxWidth()
+    ){
+        Text(text = stringResource(R.string.signup))
     }
 }
 

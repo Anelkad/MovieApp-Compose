@@ -1,6 +1,7 @@
 package com.example.moviecompose
 
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.animateOffsetAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.rememberTransformableState
@@ -30,7 +31,7 @@ fun TransformableImage(
         var scale by remember { mutableStateOf(1f) }
         val transformableState =
             rememberTransformableState { zoomChange, panChange, _ ->
-                scale = scale * zoomChange
+                scale *= zoomChange
 
                 val extraWidth = (scale - 1) * constraints.maxWidth
                 val extraHeight = (scale - 1) * constraints.maxHeight
@@ -47,11 +48,16 @@ fun TransformableImage(
                     )
                 }
             }
+        val animOffset by animateOffsetAsState(
+            targetValue = offset
+        )
         val animScale by animateFloatAsState(
-            targetValue = if (transformableState.isTransformInProgress) {
-                scale
+            targetValue = if (!transformableState.isTransformInProgress && scale > 5F) {
+                offset = Offset.Zero
+                scale = 5F
+                5F
             } else {
-                scale.coerceIn(1F, 5F)
+                scale
             }
         )
         Image(

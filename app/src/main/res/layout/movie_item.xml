@@ -52,7 +52,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:src="@drawable/baseline_bookmark_border_24"
+            android:src="@drawable/rectangle_4425"
             android:backgroundTint="@color/white"/>
         </LinearLayout>
 

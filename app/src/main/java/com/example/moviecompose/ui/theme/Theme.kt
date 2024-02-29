@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 
+//todo theme dark and light
 private val DarkColorScheme = darkColorScheme(
     primary = Yellow,
     onPrimary = Black,

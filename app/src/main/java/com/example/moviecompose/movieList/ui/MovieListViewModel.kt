@@ -50,9 +50,14 @@ class MovieListViewModel @Inject constructor(
          //todo или сделать viewModelScope.launch { _uiState.emit(newState) }
          _uiState.value = newState
     }
+
+    init {
+        getMovieList()
+    }
      private fun setEffect(effectValue: MovieListEffect) {
         viewModelScope.launch { _effect.send(effectValue) }
     }
+
      fun onEvent(event: MovieListEvent) {
         when (event) {
             MovieListEvent.StopLoading ->
@@ -64,9 +69,7 @@ class MovieListViewModel @Inject constructor(
             }
         }
     }
-    init {
-        getMovieList()
-    }
+
     private fun getMovieList() {
         viewModelScope.launch {
             try {

@@ -31,7 +31,7 @@ fun MovieListItemCard(
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),
-        onClick = {movieOnClick(movie.id)},
+        onClick = { movieOnClick(movie.id) },
         modifier = Modifier
             .padding(5.dp)
             .border(1.dp, Color.Black, shape = RoundedCornerShape(8.dp))
@@ -48,7 +48,7 @@ fun MovieListItemCard(
 fun MovieListItemContent(
     movie: MovieUI,
     movieOnSaveClick: (MovieUI) -> Unit
-){
+) {
     AsyncImage(
         model = IMAGE_URL.plus(movie.posterPath),
         placeholder = painterResource(R.drawable.loading_image),
@@ -57,7 +57,7 @@ fun MovieListItemContent(
             .padding(5.dp)
             .clip(shape = RoundedCornerShape(5.dp))
             .fillMaxWidth(),
-        )
+    )
     Text(
         text = movie.title,
         fontSize = 20.sp,
@@ -86,7 +86,7 @@ fun MovieListItemContent(
             Spacer(modifier = Modifier.height(10.dp))
         }
         IconButton(
-            onClick = {movieOnSaveClick(movie)},
+            onClick = { movieOnSaveClick(movie) },
             modifier = Modifier
                 .size(36.dp)
         ) {

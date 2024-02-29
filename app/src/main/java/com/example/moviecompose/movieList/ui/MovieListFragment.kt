@@ -13,6 +13,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -48,8 +49,7 @@ class MovieListFragment : Fragment() {
                 )
             }
         ).apply {
-            withLoadStateFooter(MovieLoadStateAdapter { movieAdapter.retry()})
-            //todo не видно прогрузку
+            withLoadStateFooter(MovieLoadStateAdapter { movieAdapter.retry() })
         }
     }
 
@@ -65,8 +65,8 @@ class MovieListFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-        ): View = ComposeView(requireContext()).apply {
-            setContent {
+    ): View = ComposeView(requireContext()).apply {
+        setContent {
             val uiState by movieListViewModel.uiState.collectAsState()
 
             val coroutineScope = rememberCoroutineScope()
@@ -77,7 +77,7 @@ class MovieListFragment : Fragment() {
             }
             if (uiState.isLoading) ProgressBar()
             Log.d("qwerty movie paging", movieAdapter.itemCount.toString())
-            
+
             MovieListScreen(recyclerView = recyclerView)
             //todo MovieListScreen передать LoadState adapter
         }
@@ -96,8 +96,10 @@ class MovieListFragment : Fragment() {
                             Toast.LENGTH_LONG
                         ).show()
                     }
+
                     MovieListEffect.ShowWaitDialog ->
                         showWaitDialog()
+
                     is MovieListEffect.NavigateToMovieDetails ->
                         navigateToMovieDetails(it.movieId)
                 }
@@ -105,7 +107,7 @@ class MovieListFragment : Fragment() {
         }
 
         movieAdapter.addLoadStateListener { loadState ->
-            if (loadState.refresh is LoadState.NotLoading && movieAdapter.itemCount>1)
+            if (loadState.refresh is LoadState.NotLoading && movieAdapter.itemCount > 1)
                 movieListViewModel.onEvent(MovieListEvent.StopLoading)
         }
 
@@ -123,13 +125,13 @@ class MovieListFragment : Fragment() {
 
     }
 
-    private fun navigateToMovieDetails(movieId: Int){
-            findNavController().navigate(
-                R.id.action_movieListFragment_to_movieDetailsFragment,
-                Bundle().apply {
-                    putInt("id", movieId)
-                }
-            )
+    private fun navigateToMovieDetails(movieId: Int) {
+        findNavController().navigate(
+            R.id.action_movieListFragment_to_movieDetailsFragment,
+            Bundle().apply {
+                putInt("id", movieId)
+            }
+        )
     }
 
     private fun showWaitDialog() {

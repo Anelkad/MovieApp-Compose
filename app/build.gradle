@@ -22,7 +22,7 @@ android {
         }
     }
     namespace 'com.example.moviecompose'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.example.moviecompose"

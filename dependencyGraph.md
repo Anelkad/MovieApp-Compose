@@ -1,4 +1,7 @@
 ```mermaid
+mermaid.initialize({
+  maxTextSize: 90000
+});
 %%{ init: { 'theme': 'base' } }%%
 graph LR;
 

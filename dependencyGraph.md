@@ -23,7 +23,6 @@ subgraph
   :feature:authorization:follow-friends([:feature:authorization:follow-friends]):::andNode;
   :feature:authorization:home([:feature:authorization:home]):::andNode;
   :feature:authorization:onboarding-popup([:feature:authorization:onboarding-popup]):::andNode;
-  :feature:authorization:personal-data-registration([:feature:authorization:personal-data-registration]):::andNode;
   :feature:authorization:questionnaires([:feature:authorization:questionnaires]):::andNode;
   :feature:authorization:request-notification-permission([:feature:authorization:request-notification-permission]):::andNode;
   :feature:authorization:smsverify([:feature:authorization:smsverify]):::andNode;

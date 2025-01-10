@@ -1,5 +1,5 @@
 ```mermaid
-%%{ init: { 'theme': 'base', 'maxTextSize': 90000 } }%%
+%%{ init: { 'theme': 'base', 'maxTextSize': 900000 } }%%
 graph LR;
 
 %% Styling for module nodes by type
